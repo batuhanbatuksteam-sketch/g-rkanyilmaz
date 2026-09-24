@@ -69,7 +69,7 @@ on conflict (id) do update
 --    js/db.js içindeki BERBERLER.tel ile AYNI numara olmalı (oradaki '+' yok).
 insert into berberler (id, ad, telefon) values
   ('gurkan','Gürkan Yılmaz','+905358373452'),
-  ('berkay','Berkay Özer','+905358373452')
+  ('berkay','Berkay Özer','+905444636866')
 on conflict (id) do update
   set ad = excluded.ad, telefon = excluded.telefon;
 

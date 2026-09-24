@@ -44,7 +44,7 @@ export async function dbAl() {
    ayrıca index.html ve randevu.html'deki data-barber ile aynı olmalı. */
 export const BERBERLER = {
   gurkan: { ad: "Gürkan Yılmaz", tel: "905358373452" },
-  berkay: { ad: "Berkay Özer",   tel: "905358373452" },  // kendi numarası gelene dek Gürkan'a gidiyor
+  berkay: { ad: "Berkay Özer",   tel: "905444636866" },
 };
 
 /* ---------- 3) Hizmetler ----------
