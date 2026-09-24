@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Berber Paneli — GÜRKAN YILMAZ · THE BARBER</title>
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+<meta name="theme-color" content="#08090b" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=1" />
+<link rel="stylesheet" href="css/berber.css?v=1" />
+</head>
+<body class="panel-body">
+
+<!-- ============== GİRİŞ ============== -->
+<section class="giris" id="girisEkrani">
+  <form class="giris-kart" id="girisForm">
+    <div class="giris-logo metal-text" aria-hidden="true">GY</div>
+    <h1>Berber Paneli</h1>
+    <p class="giris-alt">Kendini seç, şifreni gir.</p>
+
+    <!-- GÖRSEL: fotoğraflar çekilince .kim-mono yerine
+         <img src="assets/img/berber-gurkan.jpg" alt="" /> konabilir. -->
+    <div class="kim-secim" id="kimSecim">
+      <button class="kim" type="button" data-berber="gurkan">
+        <span class="kim-mono" aria-hidden="true">GY</span>
+        <span>Gürkan</span>
+      </button>
+      <button class="kim" type="button" data-berber="berkay">
+        <span class="kim-mono" aria-hidden="true">BÖ</span>
+        <span>Berkay</span>
+      </button>
+    </div>
+
+    <label for="gSifre">Şifre</label>
+    <div class="sifre-sar">
+      <input id="gSifre" type="password" autocomplete="current-password" placeholder="••••••••" required />
+      <button class="goz" type="button" id="gozBtn" aria-label="Şifreyi göster">Göster</button>
+    </div>
+
+    <div class="panel-hata" id="girisHata" role="alert"></div>
+    <button class="btn btn-metal" type="submit" id="girisBtn">Giriş Yap</button>
+
+    <!-- Doğru sürümü çalıştırdığını anlamak için. Eski dosya önbellekteyse
+         burada "sürüm —" yazar, çünkü bu alanı JS dolduruyor. -->
+    <p class="surum">sürüm <span id="surum">—</span></p>
+  </form>
+</section>
+
+<!-- ============== PANEL ============== -->
+<main class="panel" id="panelEkrani" hidden>
+
+  <header class="panel-ust">
+    <div class="panel-kim">
+      <span class="etiket">The Barber</span>
+      <h1 id="berberAdi">—</h1>
+    </div>
+    <button class="cikis" type="button" id="cikisBtn">Çıkış</button>
+  </header>
+
+  <!-- Gün seçimi -->
+  <div class="gun-serit" id="gunSerit"></div>
+
+  <!-- Günün özeti -->
+  <div class="ozet" id="ozet"></div>
+
+  <!-- Randevu listesi -->
+  <section class="liste" id="liste"></section>
+
+  <!-- Saat kapatma -->
+  <section class="kapat-blok">
+    <h2>Saatlerim</h2>
+    <p>Bir bloğa dokun: mola ver ya da telefonla aldığın randevunun yerini tut.
+       Sadece seçili gün için geçerli.</p>
+    <div class="kapat-izgara" id="kapatIzgara"></div>
+  </section>
+
+  <!-- Haftalık çalışma programı -->
+  <section class="program-blok">
+    <div class="program-ust">
+      <div>
+        <h2>Çalışma Saatlerim</h2>
+        <p>Her gün için kendi saatini belirle. Site sadece bu aralıkta randevu verir.</p>
+      </div>
+      <span class="program-durum" id="programDurum"></span>
+    </div>
+
+    <div class="program" id="program"></div>
+
+    <div class="program-alt">
+      <button class="btn btn-metal" type="button" id="programKaydet" disabled>Kaydet</button>
+      <button class="program-geri" type="button" id="programGeri" disabled>Değişiklikleri geri al</button>
+    </div>
+  </section>
+
+</main>
+
+<script type="module" src="js/berber.js?v=1"></script>
+</body>
+</html>

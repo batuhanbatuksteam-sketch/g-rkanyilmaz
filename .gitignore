@@ -1,0 +1,24 @@
+.DS_Store
+*.log
+
+# Ham kaynak medya (4K .mov, tam çözünürlüklü .png) — depoya girmesin.
+# assets/ altındaki web sürümleri takip edilir.
+medya-kaynak/
+
+# Şifre ve anahtar dosyaları asla depoya girmesin
+*-sifreleri.txt
+*.key
+*.p8
+.env
+.env.*
+
+# Yerel test artıkları
+_ss_*.html
+_tani*.html
+.vercel
+
+# Supabase CLI artıkları
+supabase/.temp/
+
+# Panel şifrelerini içeriyor
+marka.json

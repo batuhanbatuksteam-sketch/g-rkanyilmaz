@@ -1,0 +1,8 @@
+# Depoda kalsın, siteyle birlikte yayınlanmasın.
+sql/
+supabase/
+medya-kaynak/
+sunucu.py
+medya-hazirla.sh
+marka.json
+README.md
