@@ -77,7 +77,7 @@ const EPOSTALAR = {
 };
 
 // Şifre ASCII saklanıyor. Klavyeden "ö/ü/ı/ş/ç/ğ" çıkmayabildiği için
-// yazılanı sadeleştiriyoruz: "gürkanyönetim" de "gurkanyonetim" de kabul edilsin.
+// yazılanı sadeleştiriyoruz: "şifreörnek" de "sifreornek" de kabul edilsin.
 const TR_ASCII = { "ö":"o","Ö":"o","ü":"u","Ü":"u","ı":"i","İ":"i",
                    "ş":"s","Ş":"s","ç":"c","Ç":"c","ğ":"g","Ğ":"g" };
 const sifreSadelestir = (s) =>
