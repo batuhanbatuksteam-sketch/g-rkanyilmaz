@@ -16,7 +16,6 @@
   border: 1px solid var(--line); padding: 38px 30px 32px;
   display: flex; flex-direction: column;
 }
-.giris-logo { width: 52px; margin: 0 auto 20px; opacity: .9; }
 .giris-kart h1 {
   font-family: var(--font-display); font-weight: 500; font-size: 1.5rem;
   text-align: center; margin: 0;
@@ -295,10 +294,4 @@
   -webkit-text-fill-color: rgba(201,210,220,.42);
 }
 .kim.secili .kim-mono, .kim:hover .kim-mono { -webkit-text-fill-color: rgba(226,235,244,.78); }
-.giris-logo {
-  width: 52px; height: 52px; margin: 0 auto 18px;
-  display: grid; place-items: center;
-  border: 1px solid var(--line-strong);
-  font-family: var(--font-display); font-weight: 600; font-size: 1.1rem;
-  letter-spacing: .04em;
-}
+.giris-logo { width: 150px; height: auto; margin: -8px auto 14px; display: block; }

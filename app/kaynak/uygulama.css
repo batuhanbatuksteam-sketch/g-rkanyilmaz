@@ -1,0 +1,44 @@
+/* Gürkan Yılmaz Berber — yalnızca uygulamada geçerli düzeltmeler.
+   Web panelinin CSS'i olduğu gibi kullanılıyor; burada sadece telefonun
+   çentiği, alt çubuğu ve native davranışları için gereken farklar var. */
+
+/* Çentik ve alt gezinme çubuğunun altında kalmasın */
+.panel {
+  padding-top: calc(24px + env(safe-area-inset-top));
+  padding-bottom: calc(90px + env(safe-area-inset-bottom));
+  padding-left: calc(18px + env(safe-area-inset-left));
+  padding-right: calc(18px + env(safe-area-inset-right));
+}
+
+.giris {
+  padding-top: calc(32px + env(safe-area-inset-top));
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+}
+
+/* Uygulamada metin seçme ve uzun basınca çıkan menü istemiyoruz —
+   burası bir araç, okuma sayfası değil. Telefon numarası hariç. */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  overscroll-behavior-y: contain;   /* aşırı kaydırınca sayfa zıplamasın */
+}
+.r-detay, .r-ad, input {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* iOS'ta input'a dokununca sayfanın yakınlaşmasını engeller */
+input, select, textarea { font-size: 16px; }
+
+/* Dokunma hedefleri parmak için yeterli olsun */
+.ikon-btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+.kapat-slot { min-height: 46px; }
+.p-anahtar { min-width: 46px; min-height: 30px; }
+
+/* Dokununca gri kutu parlamasın, kendi geri bildirimimiz var */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Butona basıldığını parmakla hissettir */
+.ikon-btn:active, .kapat-slot:active:not(:disabled), .btn:active { opacity: .65; }

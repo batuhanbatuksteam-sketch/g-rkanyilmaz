@@ -154,22 +154,12 @@ body.no-scroll { overflow: hidden; }
   border-bottom: 1px solid var(--line);
 }
 .nav-brand { display: flex; align-items: center; gap: 13px; }
-/* Marka işareti: usturayı andıran eğik bir çizgi ve iki harf. Logo dosyası
-   yok; olduğunda .nav-mark yerine <img> konur, hizalama aynı kalır. */
+/* Kanatlı armanın baykuş başı; tam arma bu boyutta okunmuyor. */
 .nav-mark {
-  width: 38px; height: 38px; flex-shrink: 0; position: relative;
-  border: 1px solid var(--line-strong);
-  display: grid; place-items: center;
-  font-family: var(--font-display); font-size: .82rem; font-weight: 600;
-  letter-spacing: .04em;
+  width: 44px; height: 44px; flex-shrink: 0; object-fit: contain;
   transition: width .5s var(--ease), height .5s var(--ease);
 }
-.nav.scrolled .nav-mark { width: 34px; height: 34px; }
-.nav-mark::after {
-  content: ""; position: absolute; left: 12%; right: 12%; top: 50%;
-  height: 1px; background: var(--metal-grad); opacity: .5;
-  transform: rotate(-38deg);
-}
+.nav.scrolled .nav-mark { width: 38px; height: 38px; }
 .nav-brand .wordmark {
   font-family: var(--font-display); font-weight: 600; font-size: 1rem;
   letter-spacing: .22em; line-height: 1; padding-left: 1px;
@@ -562,10 +552,8 @@ body.no-scroll { overflow: hidden; }
    ============================================================ */
 .footer { background: var(--bg-elev); border-top: 1px solid var(--line); padding-top: clamp(66px, 9vw, 114px); }
 .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 46px; padding-bottom: 66px; border-bottom: 1px solid var(--line); }
-.foot-brand .wordmark { font-family: var(--font-display); font-weight: 600; font-size: 1.5rem; letter-spacing: .16em; line-height: 1.1; }
-.foot-brand .wordmark small { display: block; font-family: var(--font-sans); font-weight: 500;
-  font-size: .54rem; letter-spacing: .42em; color: var(--metal-2); margin-top: 8px; }
-.foot-brand p { color: var(--muted); max-width: 36ch; margin-top: 20px; }
+.foot-arma { width: 240px; height: auto; margin-left: -14px; }
+.foot-brand p { color: var(--muted); max-width: 36ch; margin-top: 12px; }
 .foot-col h4 { font-size: .68rem; letter-spacing: .26em; text-transform: uppercase; color: var(--metal-2); margin-bottom: 18px; }
 .foot-col .row { display: flex; gap: 12px; margin-bottom: 15px; color: var(--ink-soft); font-size: .93rem; }
 .foot-col .row svg { flex-shrink: 0; margin-top: 3px; }

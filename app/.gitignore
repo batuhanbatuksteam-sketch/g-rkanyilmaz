@@ -1,0 +1,19 @@
+node_modules/
+www/
+
+# Native derleme çıktıları — kaynak projeler depoda kalır, çıktılar kalmaz
+android/build/
+android/app/build/
+android/.gradle/
+android/local.properties
+ios/App/build/
+ios/App/App/public/
+android/app/src/main/assets/public/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+
+# Firebase istemci yapılandırmaları — her geliştirici kendi indirir.
+# NOT: .gitignore'da yorum aynı satıra yazılamaz, desenin parçası olur.
+android/app/google-services.json
+ios/App/GoogleService-Info.plist

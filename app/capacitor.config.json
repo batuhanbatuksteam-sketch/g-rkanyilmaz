@@ -1,0 +1,16 @@
+{
+  "appId": "tr.com.gurkanyilmaz.berber",
+  "appName": "Gürkan Yılmaz Berber",
+  "webDir": "www",
+  "backgroundColor": "#08090b",
+  "ios": { "backgroundColor": "#08090b", "contentInset": "never" },
+  "android": { "backgroundColor": "#08090b" },
+  "plugins": {
+    "SplashScreen": {
+      "backgroundColor": "#08090b",
+      "showSpinner": false,
+      "launchAutoHide": true,
+      "launchShowDuration": 600
+    }
+  }
+}
