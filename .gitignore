@@ -22,3 +22,4 @@ supabase/.temp/
 
 # Panel şifrelerini içeriyor
 marka.json
+.env*
