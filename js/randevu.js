@@ -8,7 +8,7 @@
    değil. Buradaki kontroller yalnızca kullanıcıya iyi bir mesaj göstermek için. */
 
 import { dbAl, AYARLI, BERBERLER, HIZMETLER, MARKA_AD,
-         tarihAnahtari, tarihYaz } from "./db.js?v=2";
+         tarihAnahtari, tarihYaz } from "./db.js?v=3";
 
 const $  = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
@@ -351,3 +351,18 @@ if (on && BERBERLER[on]) {
   updateStepper();
   updateSummary();
 }
+
+/* ---------- veritabanında olmayan hizmeti gösterme ----------
+   Yeni bir hizmet önce sitede (db.js / randevu.html) sonra veritabanında
+   açılabiliyor. Arada müşteri onu seçerse randevu GECERSIZ_HIZMET ile
+   reddedilir — o yüzden veritabanının tanımadığı kart gizlenir. Sorgu
+   başarısız olursa hepsi görünür kalır; sessizce boş bir liste bırakmıyoruz. */
+(async () => {
+  if (!AYARLI) return;
+  const db = await dbAl();
+  if (!db) return;
+  const { data, error } = await db.from("hizmetler").select("id");
+  if (error || !data?.length) return;
+  const var_ = new Set(data.map((h) => h.id));
+  $$(".service-card").forEach((c) => { c.hidden = !var_.has(c.dataset.service); });
+})();

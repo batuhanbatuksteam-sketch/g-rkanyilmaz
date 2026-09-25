@@ -379,7 +379,7 @@
 .sayfa-kart input[type="text"]:focus { outline: none; border-color: var(--gold-2); }
 /* Telefonla randevuda hizmet seçimi — kapanan süreyi belirliyor */
 .sayfa-hizmet {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 16px;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; margin-bottom: 16px;
 }
 .sayfa-hizmet .hz {
   display: flex; flex-direction: column; align-items: center; gap: 3px;

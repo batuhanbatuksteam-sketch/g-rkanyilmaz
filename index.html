@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=2" />
+<link rel="stylesheet" href="css/style.css?v=3" />
 <!-- Google'ın siteyi Haritalar'daki kayıtla eşleştirmesi için. Adres, telefon ve
      saatler Haritalar kaydıyla birebir aynı tutulmalı. -->
 <script type="application/ld+json">
@@ -28,7 +28,7 @@
   "url": "https://gurkanyilmaz.vercel.app/",
   "image": "https://gurkanyilmaz.vercel.app/assets/img/og-gorsel.jpg",
   "telephone": "+905358373452",
-  "priceRange": "₺300–₺900",
+  "priceRange": "₺300–₺4500",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "100. Yıl Cd. No:58",
@@ -101,18 +101,14 @@
   <div class="hero-inner wrap">
     <div class="hero-kicker fade-up" style="--d:1.35s">
       <span class="rule"></span>
-      <span>Erkek Kuaförü · Tuzla</span>
+      <span>Tuzla · İstanbul</span>
     </div>
 
-    <h1 class="hero-title" aria-label="Gürkan Yılmaz">
+    <!-- Tek satır: dar ekranda da alt satıra kırılmaz, yazı ekrana göre küçülür. -->
+    <h1 class="hero-title tek-satir" aria-label="Erkek Bakım Salonu">
       <span class="hero-line" style="--i:0">
-        <span class="hollow" aria-hidden="true">GÜRKAN</span>
-        <span class="metal" aria-hidden="true">GÜRKAN</span>
-        <span class="blade" aria-hidden="true"></span>
-      </span>
-      <span class="hero-line" style="--i:1">
-        <span class="hollow" aria-hidden="true">YILMAZ</span>
-        <span class="metal" aria-hidden="true">YILMAZ</span>
+        <span class="hollow" aria-hidden="true">ERKEK BAKIM SALONU</span>
+        <span class="metal" aria-hidden="true">ERKEK BAKIM SALONU</span>
         <span class="blade" aria-hidden="true"></span>
       </span>
     </h1>
@@ -138,8 +134,8 @@
 <!-- ============== KAYAN ŞERİT ============== -->
 <div class="marquee" aria-hidden="true">
   <div class="marquee-track">
-    <span>Saç Kesimi</span><span>Sakal Tasarımı</span><span>Ustura</span><span>Saç &amp; Sakal</span><span>The Barber</span>
-    <span>Saç Kesimi</span><span>Sakal Tasarımı</span><span>Ustura</span><span>Saç &amp; Sakal</span><span>The Barber</span>
+    <span>Saç Kesimi</span><span>Sakal Tasarımı</span><span>Keratin</span><span>Cilt Bakımı</span><span>Perma</span><span>Boya</span>
+    <span>Saç Kesimi</span><span>Sakal Tasarımı</span><span>Keratin</span><span>Cilt Bakımı</span><span>Perma</span><span>Boya</span>
   </div>
 </div>
 
@@ -267,8 +263,8 @@
         <h2 class="reveal" style="--d:.05s">Koltukta Seni<br />Bekleyenler</h2>
       </div>
       <p class="lead reveal" style="--d:.14s">
-        Kısa bir liste, uzun uygulama. Randevu ekranında bu üçünden birini
-        seçiyorsun; süre ona göre ayrılıyor.
+        Kesimden bakıma, uzun uygulama. Randevu ekranında hizmetini
+        seçiyorsun; koltuk süresine göre ayrılıyor.
       </p>
     </div>
 
@@ -295,6 +291,34 @@
           <p>Kesim ve sakal tasarımının birbirine göre kurulduğu tam seans. İki hat aynı anda çizildiği için bütünlük bozulmuyor.</p>
         </div>
         <div class="price">₺900<small>1 saat</small></div>
+      </div>
+      <div class="svc-row reveal" style="--d:.15s">
+        <div>
+          <h3>Keratin Düzleştirici</h3>
+          <p>Saç telini keratinle besleyip düzleştiren bakım. Kabarma ve elektriklenme gider, saç haftalarca düz ve parlak kalır.</p>
+        </div>
+        <div class="price">₺2500<small>1 saat</small></div>
+      </div>
+      <div class="svc-row reveal" style="--d:.2s">
+        <div>
+          <h3>Cilt Bakımı</h3>
+          <p>Temizleme, gözenek açma ve maske. Tıraş sonrası tahrişi azaltır, cildi dinlendirir.</p>
+        </div>
+        <div class="price">₺1500<small>30 dakika</small></div>
+      </div>
+      <div class="svc-row reveal" style="--d:.25s">
+        <div>
+          <h3>Perma</h3>
+          <p>Saça kalıcı dalga ve hacim. Bukle boyutu yüz hattına ve saçın uzunluğuna göre seçilir.</p>
+        </div>
+        <div class="price">₺4500<small>2 saat</small></div>
+      </div>
+      <div class="svc-row reveal" style="--d:.3s">
+        <div>
+          <h3>Boya</h3>
+          <p>Beyaz kapatma ya da ton değişimi. Renk ten ve sakalla uyumlu olacak şekilde seçilir.</p>
+        </div>
+        <div class="price">₺800<small>30 dakika</small></div>
       </div>
     </div>
   </div>

@@ -55,6 +55,10 @@ export const HIZMETLER = {
   sac:      { ad: "Saç",         fiyat: 600,  sure_dk: 30, sure: "30 dk" },
   sakal:    { ad: "Sakal",       fiyat: 300,  sure_dk: 30, sure: "30 dk" },
   sacsakal: { ad: "Saç & Sakal", fiyat: 900,  sure_dk: 60, sure: "1 saat" },
+  keratin:  { ad: "Keratin Düzleştirici", fiyat: 2500, sure_dk: 60,  sure: "1 saat" },
+  cilt:     { ad: "Cilt Bakımı",  fiyat: 1500, sure_dk: 30,  sure: "30 dk" },
+  perma:    { ad: "Perma",        fiyat: 4500, sure_dk: 120, sure: "2 saat" },
+  boya:     { ad: "Boya",         fiyat: 800,  sure_dk: 30,  sure: "30 dk" },
 };
 
 /* Berber panelinde saat kapatma bu dilimle yapılıyor. */

@@ -38,7 +38,7 @@ diye arayabilirsin.
 | Supabase URL + anon anahtarı | `js/db.js` | `BURAYA_...` |
 | Gürkan'ın telefonu | `js/db.js` · `sql/01-kurulum.sql` | `+905000000000` |
 | Berkay'ın telefonu | `js/db.js` · `sql/01-kurulum.sql` | `+905000000001` |
-| Fiyatlar | `js/db.js` · `index.html` · `randevu.html` · `sql/07-fiyatlar.sql` | ✅ 600 / 300 / 900 ₺ |
+| Fiyatlar | `js/db.js` · `index.html` · `randevu.html` · `sql/07-fiyatlar.sql` | ✅ saç 600 · sakal 300 · saç & sakal 900 · keratin 2500 · cilt 1500 · perma 4500 · boya 800 ₺ |
 | Süreler | `js/db.js` · `sql/01-kurulum.sql` | 30 / 30 / 60 dk |
 | Dükkân adresi | `index.html` (İletişim + JSON-LD) | ✅ 100. Yıl Cd. No:58, Aydıntepe, Tuzla |
 | Dükkân telefonu | `index.html` (İletişim) | `+90 000 000 00 00` |

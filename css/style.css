@@ -246,6 +246,12 @@ body.no-scroll { overflow: hidden; }
    üstteki krom dolgulu ve soldan sağa açılıyor. Tam açılma sınırında
    ince bir ışık çizgisi ilerliyor: ustura geçti, metal parladı. */
 .hero-title { margin: 0; }
+/* "ERKEK BAKIM SALONU" tek satırda: 18 harf, iki satırlık isim başlığından
+   çok daha uzun. Boyut ekran genişliğine bağlı ki telefonda da taşmasın. */
+.hero-title.tek-satir .hero-line {
+  font-size: clamp(1.5rem, 6.6vw, 7.2rem);
+  line-height: 1; letter-spacing: .02em;
+}
 .hero-line {
   position: relative; display: block; width: fit-content;
   font-family: var(--font-display); font-weight: 600;

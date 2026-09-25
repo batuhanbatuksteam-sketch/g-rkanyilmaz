@@ -60,7 +60,11 @@ create table if not exists berber_hesap (
 insert into hizmetler (id, ad, sure_dk, fiyat) values
   ('sac','Saç',30,600),
   ('sakal','Sakal',30,300),
-  ('sacsakal','Saç & Sakal',60,900)
+  ('sacsakal','Saç & Sakal',60,900),
+  ('keratin','Keratin Düzleştirici',60,2500),
+  ('cilt','Cilt Bakımı',30,1500),
+  ('perma','Perma',120,4500),
+  ('boya','Boya',30,800)
 on conflict (id) do update
   set ad = excluded.ad, sure_dk = excluded.sure_dk, fiyat = excluded.fiyat;
 

@@ -3,7 +3,7 @@
    Beklemede olan randevular sarı durur: müşteri WhatsApp mesajını göndermemiş olabilir,
    berber tek dokunuşla arar veya WhatsApp'tan yazar. */
 
-import { dbAl, AYARLI, HIZMETLER, MARKA_AD, iki, tarihAnahtari, telYaz } from "./db.js?v=2";
+import { dbAl, AYARLI, HIZMETLER, MARKA_AD, iki, tarihAnahtari, telYaz } from "./db.js?v=3";
 
 /* Supabase istemcisi db.js'te tembel yükleniyor (CDN'e erişilemezse tüm modül
    düşmesin diye). Panelin tamamı ona bağlı olduğu için burada bir kez alıp
@@ -113,7 +113,7 @@ $$(".kim").forEach((b) =>
 kimCiz();
 
 // Ekrandaki sürüm damgası: bu yazı görünüyorsa güncel JS çalışıyor demektir.
-const SURUM = "5";
+const SURUM = "6";
 $("#surum").textContent = SURUM;
 
 $("#gozBtn").addEventListener("click", () => {
@@ -185,6 +185,9 @@ async function panelAc() {
   }
 
   berberId = hesap.berber_id;
+
+  const { data: hz } = await db.from("hizmetler").select("id");
+  if (hz?.length) dbHizmetleri = new Set(hz.map((h) => h.id));
 
   // slot_dk ve ozel_slot berberin çalışma biçimini belirler:
   // ızgara modunda saatler açılış–kapanış arasından üretilir, özel modda
@@ -506,6 +509,9 @@ async function molaKaldir(id, btn) {
    sitedeki randevuyla birebir aynı kural. */
 let sayfaBlok = null;
 let sayfaHizmet = "sac";
+// Veritabanının tanıdığı hizmetler. Yeni hizmet sitede var ama veritabanına
+// henüz eklenmediyse panelde de çıkmasın — kayıt yabancı anahtardan düşerdi.
+let dbHizmetleri = null;
 const slotSayfa = $("#slotSayfa");
 const sayfaHata = $("#sayfaHata");
 
@@ -538,7 +544,9 @@ function zincirBitisi(blok, sureDk) {
 
 function hizmetSecimiCiz() {
   const el = $("#sayfaHizmet");
-  el.innerHTML = Object.entries(HIZMETLER).map(([id, h]) => {
+  el.innerHTML = Object.entries(HIZMETLER)
+    .filter(([id]) => !dbHizmetleri || dbHizmetleri.has(id))
+    .map(([id, h]) => {
     const sigmaz = sayfaBlok && !zincirBitisi(sayfaBlok, h.sure_dk);
     return `<button type="button" class="hz${id === sayfaHizmet ? " secili" : ""}${sigmaz ? " sigmaz" : ""}"
                data-hizmet="${id}" aria-pressed="${id === sayfaHizmet}">

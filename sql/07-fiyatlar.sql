@@ -1,13 +1,29 @@
 -- =====================================================================
--- Gürkan Yılmaz — The Barber — Fiyatlar (iki berberde de aynı)
---   Saç 600 · Sakal 300 · Saç & Sakal 900
--- Süreler değişmiyor: saç ve sakal yarım saat (bir blok), saç & sakal bir
--- saat (iki blok). Sitedeki yazılar js/db.js, index.html ve randevu.html'de.
+-- Gürkan Yılmaz — The Barber — Hizmetler ve fiyatlar (iki berberde de aynı)
+--
+--   Saç                   600   30 dk  (1 blok)
+--   Sakal                 300   30 dk  (1 blok)
+--   Saç & Sakal           900   1 saat (2 blok)
+--   Keratin Düzleştirici 2500   1 saat (2 blok)
+--   Cilt Bakımı          1500   30 dk  (1 blok)
+--   Perma                4500   2 saat (4 blok)
+--   Boya                  800   30 dk  (1 blok)
+--
+-- Süre, randevunun kaç blok kapatacağını belirliyor (slot_bitisi). Sitedeki
+-- yazılar js/db.js, index.html ve randevu.html'de — orayla aynı tutulmalı.
+-- Tekrar çalıştırmak güvenli.
 -- =====================================================================
-update hizmetler set fiyat = 600 where id = 'sac';
-update hizmetler set fiyat = 300 where id = 'sakal';
-update hizmetler set fiyat = 900 where id = 'sacsakal';
+insert into hizmetler (id, ad, sure_dk, fiyat) values
+  ('sac',      'Saç',                   30,  600),
+  ('sakal',    'Sakal',                 30,  300),
+  ('sacsakal', 'Saç & Sakal',           60,  900),
+  ('keratin',  'Keratin Düzleştirici',  60, 2500),
+  ('cilt',     'Cilt Bakımı',           30, 1500),
+  ('perma',    'Perma',                120, 4500),
+  ('boya',     'Boya',                  30,  800)
+on conflict (id) do update
+  set ad = excluded.ad, sure_dk = excluded.sure_dk, fiyat = excluded.fiyat;
 
--- Doğrulama: 600 / 300 / 900 görünmeli
+-- Doğrulama: yedi satır, fiyatlar yukarıdaki gibi olmalı
 select id, ad, sure_dk, fiyat from hizmetler
-where id in ('sac', 'sakal', 'sacsakal') order by fiyat desc;
+where id not in ('kapali', 'mola') order by sure_dk, fiyat;
