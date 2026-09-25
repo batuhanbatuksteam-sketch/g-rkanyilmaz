@@ -410,10 +410,9 @@ body.no-scroll { overflow: hidden; }
   filter: grayscale(.3) contrast(1.04); transition: transform 1.1s var(--ease), filter .7s var(--ease); }
 .master:hover .plate img { transform: scale(1.05); filter: grayscale(0) contrast(1.06); }
 
-/* Fotoğraf gelene kadar levha 4:5. Fotoğraflı hâlde .plate 9:16 kalıyor,
-   yani <img> konduğunda kart NovaCut'taki gibi dikey uzuyor. Boşken 9:16
-   çok fazla ölü alan bırakıyordu. */
-.master .plate.plate-brushed { aspect-ratio: 4/5; }
+/* Levha da fotoğraflı kartla aynı 9:16: Gürkan'ın fotoğrafı geldi, iki kart
+   yan yana eşit boyda dursun. (İkisi de boşken 4:5'ti.) */
+.master .plate.plate-brushed { aspect-ratio: 9/16; }
 /* Fırçalanmış metal yüzey: ince, düzensiz dikey tarama + üstten gelen ışık. */
 .master .plate.plate-brushed::before {
   content: ""; position: absolute; inset: 0;
