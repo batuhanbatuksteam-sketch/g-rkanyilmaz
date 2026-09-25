@@ -8,7 +8,7 @@
    değil. Buradaki kontroller yalnızca kullanıcıya iyi bir mesaj göstermek için. */
 
 import { dbAl, AYARLI, BERBERLER, HIZMETLER, MARKA_AD,
-         tarihAnahtari, tarihYaz } from "./db.js?v=3";
+         tarihAnahtari, tarihYaz } from "./db.js?v=4";
 
 const $  = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));

@@ -58,9 +58,9 @@ create table if not exists berber_hesap (
 -- ---------------------------------------------------------------- veri
 
 insert into hizmetler (id, ad, sure_dk, fiyat) values
-  ('sac','Saç',30,600),
-  ('sakal','Sakal',30,300),
-  ('sacsakal','Saç & Sakal',60,900),
+  ('sac','Saç',30,800),
+  ('sakal','Sakal',30,400),
+  ('sacsakal','Saç & Sakal',60,1000),
   ('keratin','Keratin Düzleştirici',60,2500),
   ('cilt','Cilt Bakımı',30,1500),
   ('perma','Perma',120,4500),
