@@ -556,7 +556,7 @@ body.no-scroll { overflow: hidden; }
    ALT BÖLÜM
    ============================================================ */
 .footer { background: var(--bg-elev); border-top: 1px solid var(--line); padding-top: clamp(66px, 9vw, 114px); }
-.foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 46px; padding-bottom: 66px; border-bottom: 1px solid var(--line); }
+.foot-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 46px; padding-bottom: 66px; border-bottom: 1px solid var(--line); }
 .foot-arma { width: 240px; height: auto; margin-left: -14px; }
 .foot-brand p { color: var(--muted); max-width: 36ch; margin-top: 12px; }
 .foot-col h4 { font-size: .68rem; letter-spacing: .26em; text-transform: uppercase; color: var(--metal-2); margin-bottom: 18px; }

@@ -17,9 +17,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=4" />
-<!-- Google'ın siteyi Haritalar'daki kayıtla eşleştirmesi için. Adres, telefon ve
-     saatler Haritalar kaydıyla birebir aynı tutulmalı. -->
+<link rel="stylesheet" href="css/style.css?v=5" />
+<!-- Google'ın siteyi Haritalar'daki kayıtla eşleştirmesi için. Adres ve telefon
+     Haritalar kaydıyla birebir aynı tutulmalı. Çalışma saati bilerek yok:
+     saatleri berberler panelden blok blok belirliyor, sabit bir aralık yok. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -38,12 +39,7 @@
     "addressCountry": "TR"
   },
   "geo": { "@type": "GeoCoordinates", "latitude": 40.85339, "longitude": 29.29734 },
-  "hasMap": "https://maps.google.com/?cid=12107423709345409578",
-  "openingHoursSpecification": [{
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    "opens": "10:00", "closes": "21:00"
-  }]
+  "hasMap": "https://maps.google.com/?cid=12107423709345409578"
 }
 </script>
 </head>
@@ -127,8 +123,6 @@
   </div>
 
   <div class="hero-scroll"><span class="bar"></span> Kaydır</div>
-  <!-- ÇALIŞMA SAATİ: gerçek saatlerle değiştirilecek (sql/02-calisma-saatleri.sql ile aynı olmalı) -->
-  <div class="hero-corner"><b>10:00 — 21:00</b><br />Pazartesi — Cumartesi</div>
 </section>
 
 <!-- ============== KAYAN ŞERİT ============== -->
@@ -381,15 +375,6 @@
         </div>
       </div>
 
-      <div class="foot-col reveal" style="--d:.16s">
-        <h4>Çalışma Saatleri</h4>
-        <div class="foot-hours"><span>Pazartesi — Cuma</span><span>10:00 – 21:00</span></div>
-        <div class="foot-hours"><span>Cumartesi</span><span>10:00 – 21:00</span></div>
-        <div class="foot-hours"><span>Pazar</span><span>Kapalı</span></div>
-        <p style="color:var(--muted-dim);font-size:.78rem;margin-top:14px">
-          Saatler berber panelinden değiştirilebilir; randevu ekranı o programı okur.
-        </p>
-      </div>
     </div>
 
     <div class="foot-bottom">
