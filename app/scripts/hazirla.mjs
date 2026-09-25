@@ -53,10 +53,12 @@ for (const [kaynak, hedef] of [
   let icerik = await readFile(resolve(site, kaynak), "utf8");
   // Sürüm damgaları tarayıcı önbelleği içindi; pakette gereksiz.
   icerik = icerik.replace(/\?v=\d+/g, "");
-  // CDN yerine gömülü sürüm.
+  // CDN yerine gömülü sürüm. db.js kitaplığı tembel yüklüyor — import("…")
+  // biçimi de yakalanmalı; yoksa uygulama gömülü kopyayı hiç kullanmaz ve
+  // CDN'e erişilemeyen yerde panel açılmaz.
   icerik = icerik.replace(
-    /from\s+"https:\/\/cdn\.jsdelivr\.net\/npm\/@supabase\/supabase-js@2\/\+esm"/,
-    'from "./vendor/supabase.js"'
+    /(from\s+|import\()"https:\/\/cdn\.jsdelivr\.net\/npm\/@supabase\/supabase-js@2\/\+esm"/g,
+    '$1"./vendor/supabase.js"'
   );
   await writeFile(resolve(www, hedef), icerik);
 }

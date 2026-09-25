@@ -34,7 +34,11 @@ end;
 $$;
 
 drop trigger if exists randevu_bildirim on randevular;
+-- Berberin kendi yazdığı kayıtlar bildirim düşürmesin: mola ve telefonla
+-- alınan randevu (numarasız, musteri_tel = '0'). Siteden gelen randevuda
+-- telefon her zaman dolu — randevu_olustur boşunu reddediyor.
 create trigger randevu_bildirim
   after insert on randevular
   for each row
+  when (new.hizmet_id not in ('kapali', 'mola') and new.musteri_tel <> '0')
   execute function randevu_bildirim_tetikle();

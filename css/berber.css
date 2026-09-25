@@ -29,8 +29,11 @@
   background: var(--bg-card); border: 1px solid var(--line); padding: 0;
   transition: border-color .3s, transform .3s var(--ease);
 }
+/* Kartlar berber fotoğrafının kendi oranında (dikey 9:16): fotoğraf kırpılmadan
+   tam sığar, iki kart eşit durur. height: auto şart — yoksa <img>'nin height
+   özniteliği oranı ezip kartı uzatıyor. */
 .kim img {
-  width: 100%; aspect-ratio: 1/1; object-fit: cover; object-position: center top;
+  width: 100%; height: auto; aspect-ratio: 900 / 1613; object-fit: cover; object-position: center;
   display: block; filter: grayscale(.55) brightness(.72); transition: filter .35s;
 }
 .kim span {
@@ -107,8 +110,25 @@
 .gun-cip .g { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .gun-cip .n { font-family: var(--font-display); font-size: 1.15rem; color: var(--ink); }
 .gun-cip .a { font-size: .58rem; color: var(--muted); }
-.gun-cip.secili { border-color: var(--gold-2); background: rgba(203,168,106,.08); }
+.gun-cip.secili { border-color: var(--gold-2); background: rgba(201,210,220,.08); }
 .gun-cip.secili .n { color: var(--gold-1); }
+
+/* Onay bekleyen randevusu olan günün üstünde küçük kırmızı ışık. Çelik
+   paletin içinde tek sıcak renk olduğu için göz onu ilk yakalar. */
+.gun-cip { position: relative; }
+.gun-cip .isik {
+  position: absolute; top: 5px; right: 5px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #e2483d; box-shadow: 0 0 6px 1px rgba(226,72,61,.75);
+  animation: isik-nefes 2.2s var(--ease) infinite;
+}
+@keyframes isik-nefes {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .45; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gun-cip .isik { animation: none; }
+}
 
 /* ---- Özet ---- */
 .ozet { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 26px; }
@@ -135,7 +155,10 @@
 .randevu.cevapsiz { border-left-color: #e08a68; background: rgba(214,116,86,.05); }
 
 .r-ust { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.r-saat { font-family: var(--font-display); font-size: 1.5rem; color: var(--gold-1); line-height: 1; }
+.r-saat { font-family: var(--font-display); font-size: 1.5rem; color: var(--gold-1); line-height: 1;
+  display: flex; align-items: baseline; gap: 7px; }
+.r-saat small { font-family: var(--font-sans); font-size: .68rem; color: var(--muted); letter-spacing: .06em; }
+.r-saat small::before { content: "→ "; }
 .r-rozet {
   font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
   font-weight: 600; padding: 4px 9px; border: 1px solid currentColor;
@@ -171,16 +194,30 @@
   font-family: var(--font-display); font-weight: 500; font-size: 1.15rem; margin: 0;
 }
 .kapat-blok p { color: var(--muted); font-size: .82rem; margin: 6px 0 18px; }
-.kapat-izgara { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; }
+.kapat-izgara { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 8px; }
 .kapat-slot {
-  padding: 13px 6px; background: var(--bg-card); border: 1px solid var(--line);
-  color: var(--ink-soft); font-family: inherit; font-size: .9rem; cursor: pointer;
-  transition: border-color .3s, color .3s;
+  padding: 11px 6px; background: var(--bg-card); border: 1px solid var(--line);
+  color: var(--ink-soft); font-family: inherit; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  transition: border-color .3s, color .3s, background .3s;
 }
+.ks-saat { font-size: .95rem; font-variant-numeric: tabular-nums; }
+.ks-bit  { font-size: .62rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ks-bit::before { content: "→ "; }
+.ks-not  { font-size: .55rem; letter-spacing: .14em; text-transform: uppercase;
+           font-weight: 600; color: #8fb8d8; margin-top: 2px; }
 .kapat-slot:hover:not(:disabled) { border-color: var(--gold-2); color: var(--gold-1); }
 .kapat-slot.dolu {
-  opacity: .3; cursor: not-allowed; text-decoration: line-through;
+  opacity: .32; cursor: not-allowed;
 }
+.kapat-slot.dolu .ks-saat { text-decoration: line-through; }
+/* Mola randevu değil: çelik değil, soğuk mavi. Tekrar dokunulabilir olduğu
+   belli olsun diye soluk değil, canlı duruyor. */
+.kapat-slot.mola {
+  border-color: rgba(143,184,216,.45); background: rgba(143,184,216,.09);
+  color: #b9d4e8;
+}
+.kapat-slot.mola:hover { border-color: #8fb8d8; }
 
 @media (max-width: 420px) {
   .ikon-btn { flex: 1 1 calc(50% - 4px); }
@@ -270,13 +307,228 @@
   font-size: .6rem; letter-spacing: .1em; color: var(--muted-dim);
 }
 
+/* ============================================================
+   Blok seçenek sayfası — bloğa dokununca alttan açılır
+   ============================================================ */
+/* inset yerine dört kenar ayrı yazılıyor: `inset` kısayolu Chrome 87 ile geldi,
+   eski Android System WebView'da yok sayılıyor. O zaman position:fixed olan bu
+   katman hiç boyut alamıyor ve seçenek sayfası ekranda hiç görünmüyordu —
+   iOS'ta WKWebView güncel olduğu için sorun belli olmuyordu. */
+.sayfa {
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0;
+  z-index: 60; display: flex; align-items: flex-end;
+}
+.sayfa-arka {
+  position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(4,3,2,.78);
+  backdrop-filter: blur(3px); animation: sayfa-arka-ac .25s ease;
+}
+.sayfa-kart {
+  position: relative; width: 100%; max-width: 480px; margin: 0 auto;
+  background: var(--bg-card); border: 1px solid var(--line); border-bottom: none;
+  padding: 24px 22px calc(24px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column;
+  animation: sayfa-ac .3s var(--ease);
+  max-height: 92vh; max-height: 92svh; overflow-y: auto;
+}
+@keyframes sayfa-arka-ac { from { opacity: 0; } }
+@keyframes sayfa-ac { from { transform: translateY(18px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .sayfa-arka, .sayfa-kart { animation: none; }
+}
+
+.sayfa-etiket {
+  font-size: .58rem; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--gold-2); font-weight: 600;
+}
+.sayfa-kart h3 {
+  font-family: var(--font-display); font-weight: 500; font-size: 1.6rem;
+  color: var(--gold-1); margin: 6px 0 20px; font-variant-numeric: tabular-nums;
+}
+
+.sayfa-secenek {
+  text-align: left; width: 100%; cursor: pointer;
+  background: rgba(143,184,216,.07); border: 1px solid rgba(143,184,216,.34);
+  color: var(--ink); font-family: inherit; padding: 15px 17px;
+  display: flex; flex-direction: column; gap: 5px;
+  transition: border-color .3s, background .3s;
+}
+.sayfa-secenek:hover:not(:disabled) { border-color: #8fb8d8; background: rgba(143,184,216,.13); }
+.sayfa-secenek:disabled { opacity: .5; cursor: default; }
+.sayfa-secenek b { font-size: 1rem; color: #b9d4e8; }
+.sayfa-secenek small { font-size: .76rem; color: var(--muted); line-height: 1.5; }
+
+.sayfa-ayrac {
+  display: flex; align-items: center; gap: 12px; margin: 20px 0 18px;
+  font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted-dim);
+}
+.sayfa-ayrac::before, .sayfa-ayrac::after {
+  content: ""; flex: 1; height: 1px; background: var(--line);
+}
+
+.sayfa-label {
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold-2); font-weight: 600; margin-bottom: 8px;
+}
+.sayfa-kart input[type="text"] {
+  background: rgba(255,255,255,.03); border: 1px solid var(--line);
+  color: var(--ink); font-family: inherit; font-size: 1rem;
+  padding: 13px 15px; margin-bottom: 14px; width: 100%;
+  transition: border-color .3s;
+}
+.sayfa-kart input[type="text"]:focus { outline: none; border-color: var(--gold-2); }
+/* Telefonla randevuda hizmet seçimi — kapanan süreyi belirliyor */
+.sayfa-hizmet {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 16px;
+}
+.sayfa-hizmet .hz {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 11px 4px; cursor: pointer; font-family: inherit;
+  background: rgba(255,255,255,.03); border: 1px solid var(--line); color: var(--ink-soft);
+  transition: border-color .25s, background .25s, color .25s;
+}
+.sayfa-hizmet .hz b { font-size: .82rem; font-weight: 600; }
+.sayfa-hizmet .hz small { font-size: .64rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.sayfa-hizmet .hz.secili {
+  border-color: var(--gold-2); background: rgba(201,210,220,.1); color: var(--gold-1);
+}
+.sayfa-hizmet .hz.sigmaz { opacity: .45; }
+.sayfa-hizmet .hz.sigmaz small { color: #d98a6e; }
+.sayfa-kart .btn { width: 100%; }
+.sayfa-kart .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.sayfa-vazgec {
+  background: none; border: none; cursor: pointer; font-family: inherit;
+  font-size: .74rem; letter-spacing: .1em; color: var(--muted);
+  padding: 16px 0 4px; margin-top: 2px;
+}
+.sayfa-vazgec:hover { color: var(--ink); }
+
+/* ============================================================
+   Blok düzeni — saatlerini tek tek yazan berber
+   ============================================================ */
+.bloklar { display: flex; flex-direction: column; gap: 10px; }
+
+.b-gun {
+  background: var(--bg-card); border: 1px solid var(--line); padding: 14px 16px;
+  transition: opacity .3s;
+}
+.b-gun.kapali { opacity: .5; }
+.b-gun.kapali .b-govde { display: none; }
+
+.b-ust { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.b-ad {
+  flex: 1 1 auto; display: flex; align-items: center; gap: 11px; min-width: 0;
+  background: none; border: none; padding: 0; cursor: pointer;
+  font-family: inherit; color: var(--ink); text-align: left;
+}
+.b-ad-yazi { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.b-ad-yazi span { font-size: .92rem; font-weight: 600; }
+.b-ad-yazi small { font-size: .68rem; color: var(--muted); }
+/* Katlanır ok — açıkken aşağı bakar */
+.b-ok {
+  flex: 0 0 auto; width: 8px; height: 8px; border-right: 1.5px solid var(--gold-2);
+  border-bottom: 1.5px solid var(--gold-2); transform: rotate(-45deg);
+  transition: transform .28s var(--ease);
+}
+.b-gun.acik .b-ok { transform: rotate(45deg); }
+.b-gun.kapali .b-ok { opacity: .4; }
+
+.b-govde { margin-top: 13px; }
+.b-liste { display: flex; flex-direction: column; gap: 7px; }
+.b-bos { color: var(--muted-dim); font-size: .78rem; margin: 0; padding: 4px 0; }
+
+.b-satir { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* Saat + dakika ikilisi tek bir kutu gibi dursun */
+.b-zaman {
+  display: inline-flex; align-items: center; flex: 0 0 auto;
+  border: 1px solid var(--line); background: rgba(255,255,255,.04);
+}
+.b-zaman:focus-within { border-color: var(--gold-2); }
+.b-sec {
+  background: none; border: none; color: var(--ink);
+  font-family: inherit; font-size: .9rem; padding: 9px 4px 9px 8px;
+  font-variant-numeric: tabular-nums; cursor: pointer;
+  -webkit-appearance: none; appearance: none; text-align: center;
+}
+.b-sec:last-child { padding: 9px 8px 9px 4px; }
+.b-sec:focus { outline: none; }
+.b-iki { color: var(--muted-dim); font-size: .9rem; }
+.b-tire { color: var(--muted-dim); font-size: .8rem; }
+.b-sure {
+  font-size: .68rem; color: var(--muted); margin-left: auto;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.b-sil {
+  flex: 0 0 auto; width: 30px; height: 30px; cursor: pointer;
+  background: none; border: 1px solid var(--line); color: var(--muted);
+  font-family: inherit; font-size: .8rem; line-height: 1;
+  transition: color .3s, border-color .3s;
+}
+.b-sil:hover { color: #d98a6e; border-color: rgba(217,138,110,.4); }
+
+.b-araclar {
+  margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 11px;
+}
+.b-ekle {
+  align-self: flex-start; cursor: pointer;
+  background: none; border: 1px solid var(--line-strong); color: var(--gold-1);
+  font-family: inherit; font-size: .7rem; letter-spacing: .12em;
+  text-transform: uppercase; font-weight: 600; padding: 9px 14px;
+  transition: background .3s;
+}
+.b-ekle:hover { background: rgba(201,210,220,.1); }
+
+/* Yirmi bloğu elle yazmak işkence olurdu: aralık + süre verip tek dokunuşta
+   o günün düzenini kurar. */
+.b-doldur { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+/* Yalnızca başlık tam satır kaplasın: bu kural `> span` iken yeni eklenen
+   saat kutularını (.b-zaman) da yakalıyor ve düzeni bozuyordu. */
+.b-d-baslik {
+  font-size: .6rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted); font-weight: 600; width: 100%;
+}
+.b-doldur input {
+  background: rgba(255,255,255,.04); border: 1px solid var(--line);
+  color: var(--ink); font-family: inherit; font-size: .82rem;
+  padding: 7px 8px; font-variant-numeric: tabular-nums;
+}
+.b-doldur input:focus { outline: none; border-color: var(--gold-2); }
+.b-doldur .b-sec { font-size: .82rem; padding: 7px 4px 7px 7px; }
+.b-doldur .b-sec:last-child { padding: 7px 7px 7px 4px; }
+.b-d-sure { width: 62px; }
+.b-d-uygula {
+  cursor: pointer; background: none; border: 1px solid var(--line-strong);
+  color: var(--ink-soft); font-family: inherit; font-size: .7rem;
+  letter-spacing: .1em; text-transform: uppercase; font-weight: 600; padding: 8px 13px;
+  transition: color .3s, background .3s;
+}
+.b-d-uygula:hover { color: var(--gold-1); background: rgba(201,210,220,.08); }
+
+@media (max-width: 420px) {
+  .b-satir { flex-wrap: wrap; }
+  .b-sure { margin-left: 0; }
+}
+
+/* ---- Onay mesajı sayfası ---- */
+.onay-not { color: var(--muted); font-size: .82rem; line-height: 1.55; margin: 0 0 14px; }
+.onay-not b { color: var(--ink-soft); }
+.onay-onizleme {
+  background: rgba(255,255,255,.03); border: 1px solid var(--line);
+  padding: 14px 15px; margin-bottom: 16px;
+  font-size: .84rem; line-height: 1.6; color: var(--ink-soft);
+  white-space: pre-wrap; max-height: 34vh; overflow-y: auto;
+}
+
 /* ---- Fotoğrafsız berber seçimi ----
    Berberlerin fotoğrafı henüz çekilmedi. Boş kutu yerine ana sayfadaki
    fırçalanmış künye levhasının küçük hâli. Fotoğraf gelince .kim-mono
    yerine <img> konur; .kim img kuralları zaten yukarıda tanımlı. */
 .kim .kim-mono {
   display: grid; place-items: center;
-  width: 100%; aspect-ratio: 1/1;
+  width: 100%; aspect-ratio: 900 / 1613;   /* fotoğraflı kartla aynı boy */
   font-family: var(--font-display); font-weight: 600; font-size: 1.9rem;
   line-height: 1.24; letter-spacing: .05em; color: transparent;
   background:

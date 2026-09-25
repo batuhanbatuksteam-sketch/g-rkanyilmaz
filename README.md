@@ -38,7 +38,7 @@ diye arayabilirsin.
 | Supabase URL + anon anahtarı | `js/db.js` | `BURAYA_...` |
 | Gürkan'ın telefonu | `js/db.js` · `sql/01-kurulum.sql` | `+905000000000` |
 | Berkay'ın telefonu | `js/db.js` · `sql/01-kurulum.sql` | `+905000000001` |
-| Fiyatlar | `js/db.js` · `index.html` · `randevu.html` | 750 / 350 / 1000 ₺ |
+| Fiyatlar | `js/db.js` · `index.html` · `randevu.html` · `sql/07-fiyatlar.sql` | ✅ 600 / 300 / 900 ₺ |
 | Süreler | `js/db.js` · `sql/01-kurulum.sql` | 30 / 30 / 60 dk |
 | Dükkân adresi | `index.html` (İletişim + JSON-LD) | ✅ 100. Yıl Cd. No:58, Aydıntepe, Tuzla |
 | Dükkân telefonu | `index.html` (İletişim) | `+90 000 000 00 00` |
@@ -62,7 +62,12 @@ bozulmaz.
 2. Project Settings → API'deki **URL** ve **anon** anahtarını `js/db.js`'e yapıştır.
 3. SQL Editor'de dosyaları **sırayla** çalıştır:
    `01-kurulum.sql` → `02-calisma-saatleri.sql` → `03-yarim-saat.sql`
-   → `04-bildirimler.sql` → `05-bildirim-tetikleyici.sql`
+   → `04-bildirimler.sql` → `05-bildirim-tetikleyici.sql` → `06-esnek-slotlar.sql`
+
+   `06` berbere özel blok düzenini getirir (NovaCut 1.4 ile aynı sistem):
+   her berber panelde "Blok Düzenim"den saatlerini tek tek yazar, site
+   randevu saatlerini birebir oradan gösterir. 05 henüz çalışmadıysa 06
+   yine de çalışır; 05 sonradan çalışınca aynı filtreli tetikleyiciyi kurar.
 
    Sıra önemli: sonraki dosyalar önceki fonksiyonların üstüne yazıyor.
    `01`'i tekrar çalıştırırsan **hepsini** tekrar çalıştır.

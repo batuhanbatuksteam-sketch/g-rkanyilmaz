@@ -10,13 +10,19 @@ import { Capacitor } from "@capacitor/core";
 import { FirebaseMessaging } from "@capacitor-firebase/messaging";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { App } from "@capacitor/app";
-import { db } from "./db.js";
+// db.js tembel bir dbAl() veriyor (webde CDN düşerse modül ölmesin diye).
+// Pakette kitaplık gömülü, yani burada her zaman aynı istemci döner — panelle
+// ortak örnek, oturumu görebilsin.
+import { dbAl } from "./db.js";
 
 if (Capacitor.isNativePlatform()) {
   baslat();
 }
 
 async function baslat() {
+  const db = await dbAl();
+  if (!db) return;
+
   /* ---- Durum çubuğu koyu temaya uysun ---- */
   try {
     await StatusBar.setStyle({ style: Style.Dark });
@@ -28,22 +34,29 @@ async function baslat() {
   /* ---- Berber giriş yapınca cihazı bildirim için kaydet ---- */
   db.auth.onAuthStateChange((olay, oturum) => {
     if (oturum && (olay === "SIGNED_IN" || olay === "INITIAL_SESSION")) {
-      bildirimleriKur().catch((e) => console.error("bildirim kurulamadı:", e));
+      bildirimleriKur(db).catch((e) => console.error("bildirim kurulamadı:", e));
     }
   });
 
   /* ---- Uygulamaya geri dönünce randevular tazelensin ----
-     Berber telefonu cebine koyup çıkarınca eski listeyi görmesin. */
+     Berber telefonu cebine koyup çıkarınca eski listeyi görmesin.
+     Sayfayı yeniden yüklemiyoruz: berber blok düzenini yazarken uygulamadan
+     çıkıp dönerse kaydetmediği satırlar durmalı. */
   App.addListener("appStateChange", ({ isActive }) => {
     if (isActive && document.querySelector("#panelEkrani")?.hidden === false) {
-      location.reload();
+      tazele();
     }
   });
 }
 
+/** Panelin kendi tazeleme kancası. Yoksa (panel henüz açılmadıysa) sessiz kal. */
+function tazele() {
+  if (typeof window.UYGULAMA_TAZELE === "function") window.UYGULAMA_TAZELE();
+}
+
 let kuruldu = false;
 
-async function bildirimleriKur() {
+async function bildirimleriKur(db) {
   if (kuruldu) return;
 
   let izin = await FirebaseMessaging.checkPermissions();
@@ -59,19 +72,19 @@ async function bildirimleriKur() {
 
   // Token zamanla yenilenebilir; yenisi gelince üzerine yazıyoruz.
   await FirebaseMessaging.addListener("tokenReceived", ({ token }) => {
-    cihazKaydet(token).catch((e) => console.error("cihaz kaydedilemedi:", e));
+    cihazKaydet(db, token).catch((e) => console.error("cihaz kaydedilemedi:", e));
   });
 
   // Bildirime dokununca paneli tazele ki yeni randevu hemen görünsün.
   await FirebaseMessaging.addListener("notificationActionPerformed", () => {
-    location.reload();
+    tazele();
   });
 
   const { token } = await FirebaseMessaging.getToken();
-  if (token) await cihazKaydet(token);
+  if (token) await cihazKaydet(db, token);
 }
 
-async function cihazKaydet(token) {
+async function cihazKaydet(db, token) {
   const { data: hesap } = await db
     .from("berber_hesap").select("berber_id").single();
   if (!hesap) return;

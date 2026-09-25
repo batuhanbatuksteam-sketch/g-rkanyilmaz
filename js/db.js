@@ -52,9 +52,9 @@ export const BERBERLER = {
    yarım saatlik, saç & sakal iki dilim birden kaplıyor.
    Fiyatı değiştirirsen randevu.html ve index.html'deki yazıyı da güncelle. */
 export const HIZMETLER = {
-  sac:      { ad: "Saç",         fiyat: 750,  sure_dk: 30, sure: "30 dk" },
-  sakal:    { ad: "Sakal",       fiyat: 350,  sure_dk: 30, sure: "30 dk" },
-  sacsakal: { ad: "Saç & Sakal", fiyat: 1000, sure_dk: 60, sure: "1 saat" },
+  sac:      { ad: "Saç",         fiyat: 600,  sure_dk: 30, sure: "30 dk" },
+  sakal:    { ad: "Sakal",       fiyat: 300,  sure_dk: 30, sure: "30 dk" },
+  sacsakal: { ad: "Saç & Sakal", fiyat: 900,  sure_dk: 60, sure: "1 saat" },
 };
 
 /* Berber panelinde saat kapatma bu dilimle yapılıyor. */

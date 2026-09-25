@@ -8,7 +8,7 @@
    değil. Buradaki kontroller yalnızca kullanıcıya iyi bir mesaj göstermek için. */
 
 import { dbAl, AYARLI, BERBERLER, HIZMETLER, MARKA_AD,
-         tarihAnahtari, tarihYaz } from "./db.js?v=1";
+         tarihAnahtari, tarihYaz } from "./db.js?v=2";
 
 const $  = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
@@ -189,7 +189,13 @@ $$(".service-card").forEach((card) =>
     $$(".service-card").forEach((c) => c.classList.toggle("selected", c === card));
     goTo(3);
     // Gün zaten seçiliyse süre değiştiği için uygunluk yeniden sorulmalı.
-    if (state.date) { renderSlots(); await musaitlikYukle(); renderSlots(); }
+    // Seçili saat yeni süreye sığmıyorsa (saç → saç & sakal) seçim düşsün;
+    // yoksa müşteri dolu bir saati seçili sanıp formu doldurur.
+    if (state.date) {
+      renderSlots(); await musaitlikYukle();
+      if (state.time && !musaitlik?.get(state.time)?.musait) state.time = null;
+      renderSlots(); refreshNext(); updateSummary();
+    }
   }));
 
 $$("[data-back]").forEach((b) => b.addEventListener("click", () => goTo(Math.max(1, current - 1))));
