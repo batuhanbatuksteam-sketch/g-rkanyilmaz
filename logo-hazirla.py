@@ -92,7 +92,9 @@ def main():
     kucuk = arma.resize((1000, round(arma.height * 1000 / arma.width)), Image.LANCZOS)
     acilis.paste(kucuk, ((2732 - kucuk.width) // 2, (2732 - kucuk.height) // 2), kucuk)
     acilis.save(uyg / "splash.png", optimize=True)
-    print("  app/assets/icon.png, splash.png")
+    # Ayrı koyu sürüm verilmezse capacitor-assets koyu modda minik bir ikon koyuyor
+    acilis.save(uyg / "splash-dark.png", optimize=True)
+    print("  app/assets/icon.png, splash.png, splash-dark.png")
 
 
 if __name__ == "__main__":
