@@ -40,11 +40,11 @@ diye arayabilirsin.
 | Berkay'ın telefonu | `js/db.js` · `sql/01-kurulum.sql` | `+905000000001` |
 | Fiyatlar | `js/db.js` · `index.html` · `randevu.html` | 750 / 350 / 1000 ₺ |
 | Süreler | `js/db.js` · `sql/01-kurulum.sql` | 30 / 30 / 60 dk |
-| Dükkân adresi | `index.html` (İletişim) | "Adres bilgisi eklenecek" |
+| Dükkân adresi | `index.html` (İletişim + JSON-LD) | ✅ 100. Yıl Cd. No:58, Aydıntepe, Tuzla |
 | Dükkân telefonu | `index.html` (İletişim) | `+90 000 000 00 00` |
 | Instagram | `index.html` (İletişim) | boş bağlantı |
 | Çalışma saatleri | `index.html` · `sql/02-calisma-saatleri.sql` | 10:00–21:00, Pazar kapalı |
-| Semt/ilçe | `index.html` (hero üstü) | "İstanbul" |
+| Semt/ilçe | `index.html` (hero üstü) | ✅ Tuzla |
 | Berber fotoğrafları | aşağıya bak | künye levhası |
 
 **Telefon biçimi önemli:** `sql`'de `+905321112233`, `js/db.js`'de `905321112233`
