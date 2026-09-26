@@ -343,7 +343,10 @@ $("#restart").addEventListener("click", () => {
 });
 
 /* ---------- açılış: ?berber= ile ön seçim ---------- */
-const on = new URLSearchParams(location.search).get("berber");
+// Sayfada tek berber kartı varsa seçim sorulmaz, o berberle başlanır.
+const kartlar = $$(".choice-card");
+const on = new URLSearchParams(location.search).get("berber")
+  || (kartlar.length === 1 ? kartlar[0].dataset.barber : null);
 if (on && BERBERLER[on]) {
   selectBarber(on, false);
   goTo(2);

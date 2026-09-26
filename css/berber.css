@@ -24,6 +24,7 @@
 
 /* Kim olduğunu seç — e-posta yazmaya gerek yok */
 .kim-secim { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+.kim-secim > .kim:only-child { grid-column: 1 / -1; justify-self: center; width: 100%; max-width: 170px; }
 .kim {
   position: relative; overflow: hidden; cursor: pointer;
   background: var(--bg-card); border: 1px solid var(--line); padding: 0;

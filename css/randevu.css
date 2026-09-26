@@ -56,6 +56,7 @@
    Fotoğraflar henüz yok; ana sayfadakiyle aynı fırçalanmış künye levhası.
    Görsel geldiğinde .choice-plate içine <img> konur, başka değişiklik yok. */
 .choice-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; max-width: 760px; margin-inline: auto; }
+.choice-grid > .choice-card:only-child { grid-column: 1 / -1; justify-self: center; width: 100%; max-width: 360px; }
 .choice-card { position: relative; overflow: hidden; text-align: left; background: var(--bg-card);
   border: 1px solid var(--line); isolation: isolate;
   transition: border-color .45s var(--ease), transform .45s var(--ease); }

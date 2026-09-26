@@ -399,6 +399,8 @@ body.no-scroll { overflow: hidden; }
    Görsel geldiğinde .plate içine <img> konur, gerisi aynı kalır.
    ============================================================ */
 .masters-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 860px; margin-inline: auto; }
+/* Tek berber kaldığında kart ortada, tek sütun */
+.masters-grid > .master:only-child { grid-column: 1 / -1; justify-self: center; width: 100%; max-width: 420px; }
 .master {
   position: relative; overflow: hidden; background: var(--bg-card);
   border: 1px solid var(--line); isolation: isolate;

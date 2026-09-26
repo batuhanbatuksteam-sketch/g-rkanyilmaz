@@ -96,6 +96,8 @@ const sifreSadelestir = (s) =>
 // Son giren kişi hatırlansın — her seferinde seçmesinler.
 let seciliBerber = localStorage.getItem("gurkanyilmaz_berber");
 if (!EPOSTALAR[seciliBerber]) seciliBerber = null;
+// Girişte tek kişi varsa seçmeye gerek yok.
+if (!seciliBerber && $$(".kim").length === 1) seciliBerber = $(".kim").dataset.berber;
 
 function kimCiz() {
   $$(".kim").forEach((b) =>
