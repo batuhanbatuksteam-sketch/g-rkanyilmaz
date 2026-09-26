@@ -37,6 +37,20 @@
 .st-bugun { text-align: right; }
 .st-bugun strong { font-family: var(--font-mono); font-size: 1.3rem; }
 
+/* ---- Görünüm seçimi ---- */
+.st-stil { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px; }
+.st-stil button {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+  padding: 13px 14px; cursor: pointer; text-align: left;
+  border: 1px solid var(--line); background: var(--bg-card); color: var(--ink);
+  font-family: var(--font-sans); transition: border-color .25s, background .25s;
+  -webkit-tap-highlight-color: transparent;
+}
+.st-stil b { font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 600; }
+.st-stil small { font-size: .74rem; color: var(--muted); }
+.st-stil button.secili { background: var(--metal-grad-soft); border-color: transparent; color: #0a0c0f; }
+.st-stil button.secili small { color: #2c333b; }
+
 /* ---- Seç ---- */
 .st-sec {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -108,6 +122,7 @@
 @keyframes st-don { to { transform: rotate(360deg); } }
 .st-durum.hata { color: #f0b49c; }
 .st-durum.tekrar { left: auto; right: 6px; bottom: auto; top: 6px; }
+.st-durum.stil { right: auto; left: 6px; bottom: auto; top: 6px; padding: 4px 6px; }
 
 .st-bos { color: var(--muted); font-size: .86rem; text-align: center; padding: 30px 10px; }
 

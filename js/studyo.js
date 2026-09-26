@@ -46,6 +46,13 @@ let yoklamaSaati = null;
 let sonYoklama = 0;
 const adresler = new Map();   // storage yolu -> { url, bitis }
 
+/* Görünüm seçimi. Sunucu her stil için ayrı prompt kullanıyor ve stili
+   çıktının dosya adına yazıyor (…-dogal.jpg); etiket oradan okunuyor. */
+const STILLER = { studyo: "Stüdyo", dogal: "Daha Doğal" };
+let stil = localStorage.getItem("studyo_stil");
+if (!Object.hasOwn(STILLER, stil ?? "")) stil = "studyo";
+const stilOku = (yol) => yol?.match(/-(studyo|dogal)\.jpe?g$/)?.[1] || null;
+
 if (db) {
   db.auth.onAuthStateChange((olay, oturum) => {
     // Supabase dinleyicinin içinde başka istek beklenmemesini istiyor.
@@ -139,6 +146,7 @@ function ciz() {
   $("#stHak").textContent = Math.floor(cuzdan.bakiye / fiyat) + " fotoğraf hakkı";
   $("#stBugun").textContent = `${bugunkuSayi()}/${cuzdan.gunluk_sinir}`;
   $("#stFiyat").textContent = `En fazla ${EN_FAZLA} · her biri ${fiyat} ₺`;
+  stilCiz();
   seciliCiz();
   izgaraCiz();
 }
@@ -199,7 +207,8 @@ function kartHtml(x) {
   const etiket = {
     isleniyor: `<span class="st-durum isleniyor"><i></i>İşleniyor</span>`,
     hata:      `<span class="st-durum hata">${hataNedeni(x.hata)}${x.ucret ? " · iade edildi" : ""}</span>`,
-    hazir:     x.kaynak_is ? `<span class="st-durum tekrar">Tekrar</span>` : "",
+    hazir:     (x.kaynak_is ? `<span class="st-durum tekrar">Tekrar</span>` : "")
+             + (stilOku(x.cikti) ? `<span class="st-durum stil">${STILLER[stilOku(x.cikti)]}</span>` : ""),
   }[x.durum];
   return `
     <button type="button" class="st-kart ${x.durum}" data-is="${x.id}" ${x.durum === "hazir" ? "" : "disabled"}>
@@ -213,6 +222,22 @@ function hataYaz(m) {
   el.textContent = m || "";
   el.classList.toggle("show", !!m);
 }
+
+/* ---------------------------------------------------------------- görünüm */
+function stilCiz() {
+  document.querySelectorAll("#stStil [data-stil]").forEach((b) => {
+    const secili = b.dataset.stil === stil;
+    b.classList.toggle("secili", secili);
+    b.setAttribute("aria-checked", String(secili));
+  });
+}
+
+document.querySelectorAll("#stStil [data-stil]").forEach((b) =>
+  b.addEventListener("click", () => {
+    stil = b.dataset.stil;
+    localStorage.setItem("studyo_stil", stil);
+    stilCiz();
+  }));
 
 /* ---------------------------------------------------------------- seçim */
 $("#stDosya").addEventListener("change", async (e) => {
@@ -278,7 +303,7 @@ $("#stGonder").addEventListener("click", async () => {
       return yol;
     }));
 
-    const { data, error } = await db.functions.invoke("foto-studyo", { body: { girdiler: yollar } });
+    const { data, error } = await db.functions.invoke("foto-studyo", { body: { girdiler: yollar, stil } });
     if (error) throw error;
 
     const acilan = data.isler?.length || 0;
@@ -313,6 +338,11 @@ function bakAc(x) {
   // Ücretli fotoğrafın bir ücretsiz tekrarı var; tekrarın tekrarı yok.
   const tekrarVar = isler.some((i) => i.kaynak_is === x.id);
   $("#stTekrar").hidden = x.ucret === 0 || tekrarVar;
+  const bu = stilOku(x.cikti);
+  $("#stBakBaslik").textContent = "Önce · Sonra" + (bu ? " · " + STILLER[bu] : "");
+  // Tekrar, üstte seçili görünümle yapılır: Stüdyo sonucunu beğenmeyen
+  // aynı fotoğrafı ücretsiz olarak Daha Doğal'da da görebilir.
+  $("#stTekrar").textContent = `Beğenmedin mi? Ücretsiz tekrar dene · ${STILLER[stil]}`;
   $("#stBakHata").classList.remove("show");
   bak.hidden = false;
   document.body.style.overflow = "hidden";
@@ -372,7 +402,7 @@ async function paylas(url, ad) {
 $("#stTekrar").addEventListener("click", async () => {
   const btn = $("#stTekrar");
   btn.disabled = true;
-  const { data, error } = await db.functions.invoke("foto-studyo", { body: { tekrar: bakilan.id } });
+  const { data, error } = await db.functions.invoke("foto-studyo", { body: { tekrar: bakilan.id, stil } });
   btn.disabled = false;
   if (error || data?.hata) {
     let kod = data?.hata;

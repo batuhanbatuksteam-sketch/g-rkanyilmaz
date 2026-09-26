@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css?v=5" />
 <link rel="stylesheet" href="css/berber.css?v=6" />
-<link rel="stylesheet" href="css/studyo.css?v=1" />
+<link rel="stylesheet" href="css/studyo.css?v=2" />
 </head>
 <body class="panel-body">
 
@@ -80,6 +80,16 @@
         <span class="st-etiket">Bugün</span>
         <strong id="stBugun">—</strong>
       </div>
+    </div>
+
+    <!-- Görünüm: iki prompt (supabase/functions/foto-studyo — PROMPTLAR) -->
+    <div class="st-stil" id="stStil" role="radiogroup" aria-label="Görünüm">
+      <button type="button" role="radio" data-stil="studyo">
+        <b>Stüdyo</b><small>Siyaha yakın fon</small>
+      </button>
+      <button type="button" role="radio" data-stil="dogal">
+        <b>Daha Doğal</b><small>Dükkân korunur, arkası loş</small>
+      </button>
     </div>
 
     <label class="st-sec" for="stDosya">
@@ -206,7 +216,7 @@
 <!-- Stüdyo: önce / sonra -->
 <div class="st-bak" id="stBak" hidden>
   <div class="st-bak-ust">
-    <span class="sayfa-etiket">Önce · Sonra</span>
+    <span class="sayfa-etiket" id="stBakBaslik">Önce · Sonra</span>
     <button class="cikis" type="button" data-bak-kapat>Kapat</button>
   </div>
   <div class="st-karsi">
@@ -221,7 +231,7 @@
   </div>
 </div>
 
-<script type="module" src="js/berber.js?v=10"></script>
-<script type="module" src="js/studyo.js?v=2"></script>
+<script type="module" src="js/berber.js?v=11"></script>
+<script type="module" src="js/studyo.js?v=3"></script>
 </body>
 </html>
