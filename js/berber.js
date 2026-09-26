@@ -113,7 +113,7 @@ $$(".kim").forEach((b) =>
 kimCiz();
 
 // Ekrandaki sürüm damgası: bu yazı görünüyorsa güncel JS çalışıyor demektir.
-const SURUM = "8";
+const SURUM = "9";
 $("#surum").textContent = SURUM;
 
 $("#gozBtn").addEventListener("click", () => {

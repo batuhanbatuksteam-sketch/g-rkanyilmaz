@@ -184,11 +184,21 @@ function izgaraCiz() {
     <div class="st-izgara-ic">${liste.map(kartHtml).join("")}</div>`).join("");
 }
 
+/** Sunucunun yazdığı ham hatadan berberin anlayacağı kısa neden.
+ *  "Servis" dediğimiz Replicate: kredisi biterse berber yöneticiye haber verir. */
+function hataNedeni(hata = "") {
+  if (/replicate 402|insufficient credit/i.test(hata)) return "Servis kredisi bitti";
+  if (/replicate 401|unauthenticated/i.test(hata))     return "Servis bağlı değil";
+  if (/flagged|sensitive|safety/i.test(hata))          return "Fotoğraf reddedildi";
+  if (/replicate 429|capacity|high demand/i.test(hata)) return "Servis yoğun";
+  return "Olmadı";
+}
+
 function kartHtml(x) {
   const resim = x.durum === "hazir" ? adres(x.cikti) : adres(x.girdi);
   const etiket = {
     isleniyor: `<span class="st-durum isleniyor"><i></i>İşleniyor</span>`,
-    hata:      `<span class="st-durum hata">${x.ucret ? "Olmadı · iade edildi" : "Olmadı"}</span>`,
+    hata:      `<span class="st-durum hata">${hataNedeni(x.hata)}${x.ucret ? " · iade edildi" : ""}</span>`,
     hazir:     x.kaynak_is ? `<span class="st-durum tekrar">Tekrar</span>` : "",
   }[x.durum];
   return `
