@@ -1,0 +1,118 @@
+/* ============================================================
+   GÜRKAN YILMAZ — THE BARBER · Galeri (js/galeri.js)
+   Kontak baskısı ritmi: sütunlar farklı yükseklikten başlar, her kare
+   çelik bir çerçevede numaralanır. Tıklayınca tam ekran açılır.
+   ============================================================ */
+
+.gallery { overflow: hidden; }
+
+.gal-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: clamp(10px, 1.6vw, 22px);
+  /* Kaydırılan sütunlar alttan taşmasın */
+  padding-bottom: clamp(40px, 7vw, 110px);
+}
+
+.gal-item {
+  position: relative; display: block; width: 100%; padding: 0; margin: 0;
+  border: 1px solid var(--line); background: var(--bg-card);
+  aspect-ratio: 9 / 16; overflow: hidden; cursor: zoom-in;
+  -webkit-tap-highlight-color: transparent;
+}
+/* 2. ve 4. sütun aşağıdan başlar */
+.gal-item:nth-child(4n + 2), .gal-item:nth-child(4n + 4) { transform: translateY(clamp(24px, 5vw, 80px)); }
+
+.gal-item img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transform: scale(1.02);
+  transition: filter .7s var(--ease), transform 1.2s var(--ease);
+}
+/* Alttan gelen koyu perde: numara okunsun */
+.gal-item::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, transparent 58%, rgba(8,9,11,.82) 100%);
+  transition: opacity .6s var(--ease);
+}
+/* Çelik kenar: üstten geçen ince parlama */
+.gal-item::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; z-index: 2;
+  background: var(--metal-grad); opacity: .0; transition: opacity .5s var(--ease);
+}
+.gal-no {
+  position: absolute; left: 14px; bottom: 12px; z-index: 2;
+  font-family: var(--font-mono); font-size: .64rem; letter-spacing: .22em;
+  color: var(--metal-2); text-transform: uppercase;
+}
+.gal-no::before { content: ""; display: inline-block; width: 18px; height: 1px;
+  background: var(--metal-grad-soft); vertical-align: middle; margin-right: 9px; }
+
+/* Fareli cihazda kareler hafif soluk durur, üstüne gelince renklenir.
+   Dokunmatikte hover olmadığı için hep tam renkte. */
+@media (hover: hover) {
+  .gal-item img { filter: grayscale(.35) brightness(.86) contrast(1.02); }
+  .gal-item:hover img { filter: none; transform: scale(1.06); }
+  .gal-item:hover::before { opacity: 1; }
+}
+.gal-item:focus-visible { outline: 1px solid var(--metal-1); outline-offset: 3px; }
+
+/* Fazlası gizli; "Tümünü Gör" açar */
+.gal-item.gal-fazla { display: none; }
+.gallery.acik .gal-item.gal-fazla { display: block; }
+
+.gal-alt { display: flex; justify-content: center; margin-top: 8px; }
+.gallery.acik .gal-alt { display: none; }
+
+/* ---------------------------------------------------------------- tam ekran */
+.gal-bak {
+  position: fixed; inset: 0; z-index: 200; background: rgba(6,7,9,.97);
+  display: grid; grid-template-rows: auto 1fr auto;
+  opacity: 0; visibility: hidden; transition: opacity .35s var(--ease), visibility .35s;
+}
+.gal-bak.acik { opacity: 1; visibility: visible; }
+
+.gal-bak-ust {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: calc(14px + env(safe-area-inset-top)) clamp(16px, 4vw, 40px) 14px;
+}
+.gal-sayac { font-family: var(--font-mono); font-size: .74rem; letter-spacing: .2em; color: var(--metal-2); }
+.gal-sayac b { color: var(--ink); font-weight: 500; }
+.gal-kapat {
+  width: 44px; height: 44px; border: 1px solid var(--line-strong); background: transparent;
+  color: var(--ink); cursor: pointer; display: grid; place-items: center;
+}
+.gal-kapat:hover { border-color: var(--metal-2); }
+
+.gal-sahne { position: relative; min-height: 0; display: grid; place-items: center; overflow: hidden; touch-action: pan-y; }
+.gal-sahne img {
+  max-width: min(92vw, 820px); max-height: 100%; width: auto; height: auto; object-fit: contain;
+  border: 1px solid var(--line); box-shadow: var(--shadow);
+  transition: opacity .3s var(--ease), transform .45s var(--ease);
+}
+.gal-sahne img.gecis { opacity: 0; transform: scale(.985); }
+
+.gal-ok {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+  width: 52px; height: 52px; border: 1px solid var(--line-strong); cursor: pointer;
+  background: rgba(8,9,11,.55); color: var(--ink); display: grid; place-items: center;
+  backdrop-filter: blur(6px); transition: border-color .3s, background .3s;
+}
+.gal-ok:hover { border-color: var(--metal-2); background: rgba(8,9,11,.8); }
+.gal-ok.onceki { left: clamp(10px, 3vw, 36px); }
+.gal-ok.sonraki { right: clamp(10px, 3vw, 36px); }
+
+.gal-bak-alt {
+  padding: 14px clamp(16px, 4vw, 40px) calc(18px + env(safe-area-inset-bottom));
+  text-align: center; color: var(--muted); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+}
+
+@media (max-width: 860px) {
+  .gal-grid { grid-template-columns: repeat(2, 1fr); }
+  .gal-item:nth-child(4n + 2), .gal-item:nth-child(4n + 4) { transform: none; }
+  .gal-item:nth-child(2n) { transform: translateY(clamp(28px, 9vw, 60px)); }
+  .gal-ok { display: none; }          /* dokunmatikte kaydırarak geçiliyor */
+  .gal-sahne img { max-width: 94vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gal-item img, .gal-sahne img, .gal-bak { transition: none; }
+}

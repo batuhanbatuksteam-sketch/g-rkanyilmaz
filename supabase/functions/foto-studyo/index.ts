@@ -79,7 +79,9 @@ LIGHT ON THE PERSON:
 A soft studio key light that clearly lights the face and hair, so the person stands out bright against the darker room, with gentle fill and a subtle rim light that separates the head and shoulders from the background. Clean exposure, correct white balance, clear hair texture.
 
 FINISH:
-Natural and real — like a photographer brought studio lights into the shop. Real skin texture, no airbrushing, no plastic skin, no over-sharpening, no HDR, no halos around the hair, no cut-out look. You may remove loose hair clippings lying on the skin or cape. No text, no logo, no watermark.`;
+Natural and real — like a photographer brought studio lights into the shop. Real skin texture, no airbrushing, no plastic skin, no over-sharpening, no HDR, no halos around the hair, no cut-out look. You may remove loose hair clippings lying on the skin or cape.
+
+OVERLAYS: if any text, caption, sticker, emoji, logo, watermark, username or other graphic has been added on top of the photo (for example by a social media app), remove it completely and fill that area naturally with what would be behind it. Text that physically exists in the scene, such as a shop sign or print on clothing, stays. Do not add any new text, logo or watermark.`;
 
 /* Uygulamadaki seçim: "studyo" (siyaha yakın fon) ya da "dogal" (mekân korunur). */
 const PROMPTLAR: Record<string, string> = { studyo: PROMPT_STUDYO, dogal: PROMPT_DOGAL };
