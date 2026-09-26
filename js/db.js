@@ -40,11 +40,10 @@ export async function dbAl() {
 /* ---------- 2) Berberler ----------
    tel: WhatsApp derin bağlantısı için, ülke kodlu ve yalnız rakam.
    '+90 532 111 22 33' → '905321112233'
-   Anahtarlar (gurkan / berkay) veritabanındaki berberler.id ile,
+   Anahtarlar (gurkan) veritabanındaki berberler.id ile,
    ayrıca index.html ve randevu.html'deki data-barber ile aynı olmalı. */
 export const BERBERLER = {
   gurkan: { ad: "Gürkan Yılmaz", tel: "905358373452" },
-  berkay: { ad: "Berkay Özer",   tel: "905444636866" },
 };
 
 /* ---------- 3) Hizmetler ----------

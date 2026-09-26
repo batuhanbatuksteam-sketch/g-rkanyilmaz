@@ -83,7 +83,6 @@ const girisHata = $("#girisHata");
 // Berberler e-posta yazmasın: kim olduğunu seçer, arkada e-postaya çevrilir.
 const EPOSTALAR = {
   gurkan: "gurkan@gurkanyilmaz.local",
-  berkay: "berkay@gurkanyilmaz.local",
 };
 
 // Şifre ASCII saklanıyor. Klavyeden "ö/ü/ı/ş/ç/ğ" çıkmayabildiği için
@@ -652,7 +651,7 @@ $("#sayfaRandevu").addEventListener("click", () => {
 });
 
 /* ---------- haftalık çalışma programı (ızgara modu) ----------
-   Gürkan ve Berkay ikisi de kendi bloklarını yazıyor, yani bu bölüm
+   Gürkan kendi bloklarını yazıyor, yani bu bölüm
    şu an hiçbir berbere görünmüyor. Duruyor çünkü ozel_slot varsayılanı false:
    sisteme yeni bir berber eklenirse blokları tek tek yazmak zorunda kalmadan
    açılış–kapanış verip çalışmaya başlayabilsin. */
