@@ -26,23 +26,34 @@ const KOVA = "foto-studyo";
 const MODEL = "google/nano-banana-pro";
 
 /* Uygulama güncellemeden değiştirilebilsin diye prompt burada.
-   Amaç: saçı ve yüzü AYNEN bırakıp sadece fotoğrafı profesyonelleştirmek. */
-const PROMPT = `Professional barbershop portfolio photo of this exact haircut.
+   Amaç: fotoğrafın aslı korunur — kafa açısı, poz, kadraj, yüz ve saç AYNEN
+   kalır; arka plan değiştirilmez, sadece ölçülü koyulaşır. Sonuç elle
+   çekilmiş ama stüdyo kalitesinde, insan işi gibi durmalı.
+   Denemede öğrenilenler:
+   - Prompt'ta "fade/taper" geçince model olmayan fade'i kendisi çiziyor;
+     saç sadece "olduğu gibi" diye tarif ediliyor, fade yasaklanıyor.
+   - "Dükkân arka planını koru" deyince dükkânda çekilmemiş fotoğrafa ayna,
+     raf, lavabo uyduruyor; arka plan "aynı duvarlar, aynı nesneler" diye
+     tarif ediliyor, nesne eklemek yasak.
+   - İşi Lightroom rötuşu diye tarif etmek, modelin kareyi baştan çizmesini
+     (kafa açısının kaymasını) azaltıyor. */
+const PROMPT = `Retouch this photo the way a professional photo editor would in Lightroom and Photoshop: only exposure, white balance, color grading, soft dodge and burn, and a darkening mask on the background. Do not regenerate, repaint or redraw anything. The result must be the same photograph.
 
-PRESERVE EXACTLY — do not change:
-- The person's identity: same face, facial features, eyes, nose, lips, ears, skin tone, age, expression, head shape, head angle and pose.
-- The haircut: same length, fade/taper gradient and its height, line-up and edges, part line, texture, curl pattern, hair density, hair color and volume.
-- The beard and moustache: same shape, length, line and density.
-Do not restyle, extend, fill in, straighten, tidy or "improve" the hair or beard in any way. Do not add or remove hair.
+KEEP IDENTICAL TO THE ORIGINAL:
+- Head angle, tilt and rotation, gaze, pose, body position, camera angle, perspective, framing and crop.
+- Face and identity: same features, skin tone, age and expression.
+- The haircut exactly as it is: same length on top, same length and darkness on the sides and temples, same hairline, edges, part, texture, volume and color. Do not add or sharpen a fade, taper, skin fade or line-up that is not already there. Do not add shine, gloss or highlights to the hair. Do not restyle or tidy it.
+- Beard and moustache: same shape, length, edges and density.
+- Clothing as it is.
 
-IMPROVE ONLY THE PHOTOGRAPHY:
-- Soft, even studio lighting with a subtle rim light that reveals the fade and texture detail.
-- Correct white balance and exposure, crisp focus on the hair, reduced noise.
-- Natural skin with real texture — no smoothing, no makeup, no beautification.
-- Replace the background with a clean dark charcoal studio backdrop with gentle light falloff.
-- Remove loose hair clippings on the skin and neck, and background clutter.
+BACKGROUND:
+Keep the original background — the same walls and the same objects in the same places. Do not add any object, furniture, mirror or decoration, and do not replace it. Darken it by about one and a half stops into deep charcoal tones with a slight natural blur, so it is clearly darker than the person and the person stands out. Not black — the same walls and objects must still be visible, like the same real place in low light.
 
-Photorealistic, shot on a full-frame camera with an 85mm lens. Same framing and crop as the original. No text, no logo, no watermark.`;
+LIGHT:
+Soft, natural light on the person, as a skilled photographer would get with a large softbox from the front — the person a little brighter than the background, flattering but not dramatic. No hard side light, no heavy contrast. Correct white balance.
+
+LOOK:
+A real photo shot by hand by a skilled photographer on a full-frame camera — studio quality, but natural and human. Real skin texture and pores, no airbrushing, no over-sharpening, no HDR, no halos or glow, nothing that looks AI-generated. Restrained edit. You may remove loose hair clippings lying on the skin or cape. No text, no logo, no watermark.`;
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
