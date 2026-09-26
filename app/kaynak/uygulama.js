@@ -10,13 +10,32 @@ import { Capacitor } from "@capacitor/core";
 import { FirebaseMessaging } from "@capacitor-firebase/messaging";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { App } from "@capacitor/app";
+import { Filesystem, Directory } from "@capacitor/filesystem";
+import { Share } from "@capacitor/share";
 // db.js tembel bir dbAl() veriyor (webde CDN düşerse modül ölmesin diye).
 // Pakette kitaplık gömülü, yani burada her zaman aynı istemci döner — panelle
 // ortak örnek, oturumu görebilsin.
 import { dbAl } from "./db.js";
 
 if (Capacitor.isNativePlatform()) {
+  window.UYGULAMA_PAYLAS = fotoPaylas;
   baslat();
+}
+
+/* ---- Stüdyo: düzenlenen fotoğrafı galeriye kaydet ----
+   WebView indirme yapamıyor. Dosyayı önbelleğe yazıp paylaşım sayfasını
+   açıyoruz; berber "Resmi Kaydet" ile galeriye, ya da doğrudan
+   Instagram / WhatsApp'a gönderir. */
+async function fotoPaylas(adres, ad) {
+  const blob = await (await fetch(adres)).blob();
+  const veri = await new Promise((ok, red) => {
+    const r = new FileReader();
+    r.onload = () => ok(String(r.result).split(",")[1]);
+    r.onerror = red;
+    r.readAsDataURL(blob);
+  });
+  const { uri } = await Filesystem.writeFile({ path: ad, data: veri, directory: Directory.Cache });
+  await Share.share({ files: [uri] });
 }
 
 async function baslat() {

@@ -1,0 +1,152 @@
+/* ============================================================
+   Gürkan Yılmaz — The Barber — Foto Stüdyo (js/studyo.js)
+   ============================================================ */
+
+/* Stüdyo açıkken randevu bölümleri çekilir; üst bar ve sekme kalır. */
+.panel.studyo-acik > :not(.panel-ust):not(.sekme):not(.studyo) { display: none !important; }
+
+/* ---- Sekme ---- */
+.sekme {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+  padding: 4px; margin-bottom: 22px;
+  border: 1px solid var(--line); background: var(--bg-elev);
+}
+.sekme button {
+  height: 44px; border: 0; background: transparent; cursor: pointer;
+  font-family: var(--font-sans); font-size: .7rem; font-weight: 600;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
+  transition: color .25s, background .25s;
+}
+.sekme button.secili { color: #0a0c0f; background: var(--metal-grad-soft); }
+
+/* ---- Cüzdan ---- */
+.st-etiket {
+  display: block; font-size: .58rem; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--gold-2); font-weight: 600; margin-bottom: 6px;
+}
+.st-cuzdan {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 16px;
+  padding: 20px; margin-bottom: 14px;
+  background: var(--bg-card); border: 1px solid var(--line);
+}
+.st-cuzdan strong {
+  display: block; font-family: var(--font-display); font-weight: 500;
+  font-size: 2.1rem; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.st-cuzdan small { display: block; margin-top: 8px; color: var(--muted); font-size: .78rem; }
+.st-bugun { text-align: right; }
+.st-bugun strong { font-family: var(--font-mono); font-size: 1.3rem; }
+
+/* ---- Seç ---- */
+.st-sec {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 26px 16px; margin-bottom: 14px; cursor: pointer;
+  border: 1px dashed var(--line-strong); background: rgba(255,255,255,.015);
+  transition: border-color .25s, background .25s;
+  -webkit-tap-highlight-color: transparent;
+}
+.st-sec:active { background: rgba(255,255,255,.04); border-color: var(--gold-2); }
+.st-arti {
+  width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--metal-grad-soft); color: #0a0c0f; font-size: 1.6rem; line-height: 1;
+}
+.st-sec b { font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); }
+.st-sec small { color: var(--muted); font-size: .76rem; }
+
+/* ---- Seçilenler ---- */
+.st-secilen { margin-bottom: 26px; }
+.st-onizleme {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px;
+}
+.st-kucuk { position: relative; margin: 0; aspect-ratio: 3 / 4; overflow: hidden; background: var(--bg-elev); }
+.st-kucuk img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.st-kucuk button {
+  position: absolute; top: 3px; right: 3px; width: 24px; height: 24px; border-radius: 50%;
+  border: 0; background: rgba(8,9,11,.78); color: var(--ink); font-size: 1rem; line-height: 1;
+  cursor: pointer;
+}
+.st-secilen .btn { width: 100%; }
+.st-secilen .btn:disabled { opacity: .45; }
+
+/* ---- Izgara ---- */
+.st-gun-baslik {
+  font-size: .62rem; letter-spacing: .24em; text-transform: uppercase; font-weight: 600;
+  color: var(--muted); margin: 22px 0 10px;
+}
+.st-izgara-ic { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+@media (min-width: 560px) { .st-izgara-ic { grid-template-columns: repeat(4, 1fr); } }
+
+.st-kart {
+  position: relative; padding: 0; border: 0; cursor: pointer; overflow: hidden;
+  aspect-ratio: 3 / 4; background: var(--bg-elev);
+  -webkit-tap-highlight-color: transparent;
+}
+.st-kart img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.st-kart:disabled { cursor: default; }
+.st-kart.isleniyor img { filter: grayscale(1) brightness(.45); }
+.st-kart.hata img { filter: grayscale(1) brightness(.3); }
+
+/* İşlenirken üstünden geçen metal parlaması */
+.st-kart.isleniyor::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(233,238,244,.22) 50%, transparent 70%);
+  animation: st-parla 1.6s linear infinite;
+}
+@keyframes st-parla { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+.st-durum {
+  position: absolute; left: 6px; right: 6px; bottom: 6px; z-index: 1;
+  font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 5px 4px; background: rgba(8,9,11,.72); color: var(--ink-soft);
+}
+.st-durum.isleniyor i {
+  width: 9px; height: 9px; border-radius: 50%;
+  border: 1.5px solid var(--metal-3); border-top-color: var(--metal-1);
+  animation: st-don .8s linear infinite;
+}
+@keyframes st-don { to { transform: rotate(360deg); } }
+.st-durum.hata { color: #f0b49c; }
+.st-durum.tekrar { left: auto; right: 6px; bottom: auto; top: 6px; }
+
+.st-bos { color: var(--muted); font-size: .86rem; text-align: center; padding: 30px 10px; }
+
+/* ---- Önce / Sonra ---- */
+.st-bak {
+  position: fixed; inset: 0; z-index: 70; background: var(--bg);
+  display: flex; flex-direction: column;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  --kes: 50%;
+}
+.st-bak-ust {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 18px;
+}
+.st-karsi {
+  position: relative; flex: 1; min-height: 0; overflow: hidden;
+  touch-action: none; user-select: none; -webkit-user-select: none; cursor: ew-resize;
+}
+.st-karsi img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: contain; pointer-events: none;
+}
+#stSonra { clip-path: inset(0 0 0 var(--kes)); }
+.st-cizgi {
+  position: absolute; top: 0; bottom: 0; left: var(--kes); width: 2px; margin-left: -1px;
+  background: var(--metal-1); box-shadow: 0 0 12px rgba(0,0,0,.6); pointer-events: none;
+}
+.st-cizgi i {
+  position: absolute; top: 50%; left: 50%; width: 38px; height: 38px; margin: -19px 0 0 -19px;
+  border-radius: 50%; background: var(--metal-grad-soft); box-shadow: 0 4px 16px rgba(0,0,0,.6);
+}
+.st-cizgi i::before {
+  content: "‹ ›"; position: absolute; inset: 0; display: grid; place-items: center;
+  font-style: normal; font-weight: 700; color: #0a0c0f; font-size: .9rem; letter-spacing: .1em;
+}
+.st-bak-alt { padding: 14px 18px 10px; display: flex; flex-direction: column; }
+.st-bak-alt .btn { width: 100%; }
+.st-bak-alt .btn:disabled { opacity: .5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .st-kart.isleniyor::after, .st-durum.isleniyor i { animation: none; }
+}

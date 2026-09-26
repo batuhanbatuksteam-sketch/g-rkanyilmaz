@@ -49,6 +49,8 @@ for (const [kaynak, hedef] of [
   ["css/berber.css", "css/berber.css"],
   ["js/db.js", "js/db.js"],
   ["js/berber.js", "js/berber.js"],
+  ["css/studyo.css", "css/studyo.css"],
+  ["js/studyo.js", "js/studyo.js"],
 ]) {
   let icerik = await readFile(resolve(site, kaynak), "utf8");
   // Sürüm damgaları tarayıcı önbelleği içindi; pakette gereksiz.

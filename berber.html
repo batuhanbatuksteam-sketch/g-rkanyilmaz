@@ -13,6 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css?v=5" />
 <link rel="stylesheet" href="css/berber.css?v=6" />
+<link rel="stylesheet" href="css/studyo.css?v=1" />
 </head>
 <body class="panel-body">
 
@@ -61,6 +62,42 @@
     </div>
     <button class="cikis" type="button" id="cikisBtn">Çıkış</button>
   </header>
+
+  <!-- Yalnızca foto_cuzdan'da satırı olan berbere görünür (js/studyo.js) -->
+  <nav class="sekme" id="panelSekme" hidden>
+    <button type="button" class="secili" data-sekme="randevu">Randevular</button>
+    <button type="button" data-sekme="studyo">Stüdyo</button>
+  </nav>
+
+  <section class="studyo" id="studyo" hidden>
+    <div class="st-cuzdan">
+      <div>
+        <span class="st-etiket">Bakiye</span>
+        <strong id="stBakiye">—</strong>
+        <small id="stHak">—</small>
+      </div>
+      <div class="st-bugun">
+        <span class="st-etiket">Bugün</span>
+        <strong id="stBugun">—</strong>
+      </div>
+    </div>
+
+    <label class="st-sec" for="stDosya">
+      <input id="stDosya" type="file" accept="image/*" multiple hidden />
+      <span class="st-arti" aria-hidden="true">+</span>
+      <b>Fotoğraf Seç</b>
+      <small id="stFiyat">—</small>
+    </label>
+
+    <div class="panel-hata" id="stHata" role="alert"></div>
+
+    <div class="st-secilen" id="stSecilen" hidden>
+      <div class="st-onizleme" id="stOnizleme"></div>
+      <button class="btn btn-metal" type="button" id="stGonder">Düzenle</button>
+    </div>
+
+    <div class="st-izgara" id="stIzgara"></div>
+  </section>
 
   <!-- Gün seçimi -->
   <div class="gun-serit" id="gunSerit"></div>
@@ -166,6 +203,25 @@
   </div>
 </div>
 
+<!-- Stüdyo: önce / sonra -->
+<div class="st-bak" id="stBak" hidden>
+  <div class="st-bak-ust">
+    <span class="sayfa-etiket">Önce · Sonra</span>
+    <button class="cikis" type="button" data-bak-kapat>Kapat</button>
+  </div>
+  <div class="st-karsi">
+    <img id="stOnce" alt="Önce" />
+    <img id="stSonra" alt="Sonra" />
+    <span class="st-cizgi" aria-hidden="true"><i></i></span>
+  </div>
+  <div class="st-bak-alt">
+    <div class="panel-hata" id="stBakHata" role="alert"></div>
+    <button class="btn btn-metal" type="button" id="stKaydet">Galeriye Kaydet</button>
+    <button class="sayfa-vazgec" type="button" id="stTekrar">Beğenmedin mi? Ücretsiz tekrar dene</button>
+  </div>
+</div>
+
 <script type="module" src="js/berber.js?v=8"></script>
+<script type="module" src="js/studyo.js?v=1"></script>
 </body>
 </html>
