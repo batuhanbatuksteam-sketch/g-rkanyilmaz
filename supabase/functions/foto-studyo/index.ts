@@ -9,10 +9,14 @@
  *   { tekrar: "<is id>" }                    ücretsiz tekrar deneme
  *   { yokla: ["<is id>", …] }                webhook gecikirse durumu Replicate'ten sor
  *   ?kanca=<KANCA_ANAHTAR>&is=<id>           Replicate'in bitiş bildirimi
+ *   x-yonetici: <YONETICI_ANAHTAR>           kredi paneli (sadece yöneticinin Mac'i)
+ *     { islem: "durum" }                     bakiye, hareketler, maliyet özeti
+ *     { islem: "yukle", berber, tutar, aciklama }   bakiye yükle (eksi = düzeltme)
  *
  * Gereken secret'lar:
  *   REPLICATE_API_TOKEN   Replicate anahtarı (sadece bu işe açılan hesap)
  *   KANCA_ANAHTAR         webhook adresindeki rastgele parola
+ *   YONETICI_ANAHTAR      kredi panelinin parolası (kredi-paneli/ayar.js'te)
  *
  * Kurulum: supabase functions deploy foto-studyo --no-verify-jwt
  * (JWT'yi burada kendimiz doğruluyoruz; Replicate'in webhook'u JWT taşımaz.)
@@ -21,43 +25,43 @@ import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const REPLICATE = Deno.env.get("REPLICATE_API_TOKEN")!;
 const KANCA = Deno.env.get("KANCA_ANAHTAR")!;
+const YONETICI = Deno.env.get("YONETICI_ANAHTAR") ?? "";
 const SUPA_URL = Deno.env.get("SUPABASE_URL")!;
 const KOVA = "foto-studyo";
 const MODEL = "google/nano-banana-pro";
+const FOTO_USD = 0.15;   // Replicate'in 2K fiyatı; panel maliyeti bununla tahmin eder
 
 /* Uygulama güncellemeden değiştirilebilsin diye prompt burada.
-   Amaç: fotoğrafın aslı korunur — kafa açısı, poz, kadraj, yüz ve saç AYNEN
-   kalır; arka plan değiştirilmez, sadece ölçülü koyulaşır. Sonuç elle
-   çekilmiş ama stüdyo kalitesinde, insan işi gibi durmalı.
+   İstenen: stüdyo işi. Işık kalitesi bütün fotoğrafta (müşteri dahil) artar,
+   arka plan siyaha yakın koyulaşır. Yüz, kafa açısı ve saç ASLA değişmez.
    Denemede öğrenilenler:
-   - Prompt'ta "fade/taper" geçince model olmayan fade'i kendisi çiziyor;
-     saç sadece "olduğu gibi" diye tarif ediliyor, fade yasaklanıyor.
-   - "Dükkân arka planını koru" deyince dükkânda çekilmemiş fotoğrafa ayna,
-     raf, lavabo uyduruyor; arka plan "aynı duvarlar, aynı nesneler" diye
-     tarif ediliyor, nesne eklemek yasak.
-   - İşi Lightroom rötuşu diye tarif etmek, modelin kareyi baştan çizmesini
-     (kafa açısının kaymasını) azaltıyor. */
-const PROMPT = `Retouch this photo the way a professional photo editor would in Lightroom and Photoshop: only exposure, white balance, color grading, soft dodge and burn, and a darkening mask on the background. Do not regenerate, repaint or redraw anything. The result must be the same photograph.
+   - Prompt'ta saç için "fade/taper" diye tarif yapınca model olmayan fade'i
+     çiziyor; saç "olduğu gibi" diye tarif ediliyor, fade eklemek yasak.
+   - Arka planı "dükkân" diye tarif edince ayna, raf, lavabo uyduruyor;
+     nesne eklemek yasak, arka plan sadece koyulaşıyor.
+   - İşi rötuş diye tarif etmek, kareyi baştan çizmesini (kafa açısının
+     kaymasını) azaltıyor. */
+const PROMPT = `Retouch and relight this photo like a high-end studio photo editor working in Photoshop. The result must be the same photograph with studio-quality light — do not regenerate, repaint or redraw the person.
 
 KEEP IDENTICAL TO THE ORIGINAL:
+- The face: do not touch or change it — same features, face shape, skin tone, age and expression.
 - Head angle, tilt and rotation, gaze, pose, body position, camera angle, perspective, framing and crop.
-- Face and identity: same features, skin tone, age and expression.
-- The haircut exactly as it is: same length on top, same length and darkness on the sides and temples, same hairline, edges, part, texture, volume and color. Do not add or sharpen a fade, taper, skin fade or line-up that is not already there. Do not add shine, gloss or highlights to the hair. Do not restyle or tidy it.
+- The haircut exactly as it is: same length on top, same length and darkness on the sides and temples, same hairline, edges, part, texture, volume and color. Do not add or sharpen a fade, taper, skin fade or line-up that is not already there. Do not add shine or gloss to the hair.
 - Beard and moustache: same shape, length, edges and density.
-- Clothing as it is.
+- Clothing and barber cape as they are.
+
+LIGHT — STUDIO QUALITY ACROSS THE WHOLE PHOTO, THE PERSON INCLUDED:
+Professional studio lighting as in a high-end barbershop portfolio shoot: a large soft key light that cleanly lights the face, hair and shoulders, gentle fill so there are no muddy shadows, and a subtle rim light that outlines the head and shoulders against the dark background. Crisp, clean, well exposed, rich colors, correct white balance, clear detail in the hair texture.
 
 BACKGROUND:
-Keep the original background — the same walls and the same objects in the same places. Do not add any object, furniture, mirror or decoration, and do not replace it. Darken it by about one and a half stops into deep charcoal tones with a slight natural blur, so it is clearly darker than the person and the person stands out. Not black — the same walls and objects must still be visible, like the same real place in low light.
+Darken the background almost to black — deep charcoal-black studio tones with only a faint hint of the original surroundings. Do not add any object, furniture, mirror or decoration. Smooth natural falloff, no hard cut-out edges around the person or the hair.
 
-LIGHT:
-Soft, natural light on the person, as a skilled photographer would get with a large softbox from the front — the person a little brighter than the background, flattering but not dramatic. No hard side light, no heavy contrast. Correct white balance.
-
-LOOK:
-A real photo shot by hand by a skilled photographer on a full-frame camera — studio quality, but natural and human. Real skin texture and pores, no airbrushing, no over-sharpening, no HDR, no halos or glow, nothing that looks AI-generated. Restrained edit. You may remove loose hair clippings lying on the skin or cape. No text, no logo, no watermark.`;
+FINISH:
+High-end studio portrait, as if shot on a full-frame camera with an 85mm lens. Real skin texture — no airbrushing, no plastic skin, no over-sharpening, no HDR, no halos around the hair. You may remove loose hair clippings lying on the skin or cape. No text, no logo, no watermark.`;
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-yonetici",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
@@ -160,6 +164,17 @@ Deno.serve(async (istek) => {
     return yanit({ ok: true });
   }
 
+  /* ---- Kredi paneli (yöneticinin Mac'i) ---- */
+  const yoneticiAnahtari = istek.headers.get("x-yonetici");
+  if (yoneticiAnahtari !== null) {
+    if (YONETICI.length < 32 || yoneticiAnahtari !== YONETICI) return yanit({ hata: "YETKISIZ" }, 401);
+    try {
+      return yanit(await yoneticiIslem(await istek.json().catch(() => ({}))));
+    } catch (e) {
+      return yanit({ hata: String((e as Error).message ?? e) }, 400);
+    }
+  }
+
   /* ---- Uygulamadan gelen istek: berberi doğrula ---- */
   const jwt = (istek.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
   const { data: kullanici } = await yonetici.auth.getUser(jwt);
@@ -225,6 +240,95 @@ Deno.serve(async (istek) => {
 
   return yanit({ hata: "BILINMEYEN_ISTEK" }, 400);
 });
+
+/* ---------------------------------------------------------------- yönetici */
+async function yoneticiIslem(govde: any) {
+  if (govde.islem === "yukle") {
+    const berber = String(govde.berber ?? "");
+    const tutar = Number(govde.tutar);
+    if (!/^[a-z0-9_-]+$/.test(berber)) throw new Error("GECERSIZ_BERBER");
+    if (!Number.isInteger(tutar) || tutar === 0 || Math.abs(tutar) > 100_000) {
+      throw new Error("GECERSIZ_TUTAR");
+    }
+    const aciklama = String(govde.aciklama ?? "").slice(0, 120) || null;
+
+    // İyimser kilit: bakiye okunduğundan beri değişmediyse yaz. Aynı anda
+    // Gürkan fotoğraf gönderirse (foto_is_ac bakiyeyi düşürür) tekrar dener.
+    for (let deneme = 0; deneme < 5; deneme++) {
+      const { data: c, error } = await yonetici.from("foto_cuzdan")
+        .select("bakiye").eq("berber_id", berber).maybeSingle();
+      if (error) throw error;
+      if (!c) throw new Error("CUZDAN_YOK");
+      const yeni = c.bakiye + tutar;
+      if (yeni < 0) throw new Error("BAKIYE_EKSIYE_DUSER");
+
+      const { data: guncel, error: gHata } = await yonetici.from("foto_cuzdan")
+        .update({ bakiye: yeni }).eq("berber_id", berber).eq("bakiye", c.bakiye)
+        .select("bakiye");
+      if (gHata) throw gHata;
+      if (!guncel?.length) continue;
+
+      const { error: hHata } = await yonetici.from("foto_hareket")
+        .insert({ berber_id: berber, tutar, tur: "yukleme", aciklama });
+      if (hHata) {
+        // Defter yazılamadıysa bakiyeyi de geri al; kayıtsız para olmasın.
+        await yonetici.from("foto_cuzdan").update({ bakiye: c.bakiye })
+          .eq("berber_id", berber).eq("bakiye", yeni);
+        throw hHata;
+      }
+      return { ok: true, bakiye: yeni, ...(await yoneticiDurum()) };
+    }
+    throw new Error("TEKRAR_DENE");
+  }
+
+  if (govde.islem === "durum") return yoneticiDurum();
+  throw new Error("BILINMEYEN_ISLEM");
+}
+
+async function yoneticiDurum() {
+  const [cuzdanlar, hareketler, isler, hesap] = await Promise.all([
+    yonetici.from("foto_cuzdan").select("*").order("berber_id"),
+    yonetici.from("foto_hareket").select("berber_id, tutar, tur, aciklama, zaman")
+      .order("zaman", { ascending: false }).limit(5000),
+    yonetici.from("foto_is").select("berber_id, durum, ucret, olusturuldu").limit(10000),
+    replicate("account").catch(() => null),
+  ]);
+  if (cuzdanlar.error) throw cuzdanlar.error;
+
+  const bugun = istGun(new Date());
+  const berberler = (cuzdanlar.data ?? []).map((c) => {
+    const h = (hareketler.data ?? []).filter((x) => x.berber_id === c.berber_id);
+    const i = (isler.data ?? []).filter((x) => x.berber_id === c.berber_id);
+    const topla = (tur: string) => h.filter((x) => x.tur === tur).reduce((a, x) => a + x.tutar, 0);
+    const hazir = i.filter((x) => x.durum === "hazir");
+    return {
+      ...c,
+      ozet: {
+        yuklenen: topla("yukleme"),
+        harcanan: -topla("uretim") - topla("iade"),        // iadeler düşülmüş gerçek gelir
+        foto: hazir.length,                                // Replicate'in ücret aldığı üretimler
+        tekrar: hazir.filter((x) => x.ucret === 0).length, // bunlardan ücretsiz tekrar olanlar
+        hata: i.filter((x) => x.durum === "hata").length,
+        isleniyor: i.filter((x) => x.durum === "isleniyor").length,
+        bugun: i.filter((x) => x.ucret > 0 && x.durum !== "hata" && istGun(x.olusturuldu) === bugun).length,
+      },
+      hareketler: h.slice(0, 40),
+    };
+  });
+
+  return {
+    berberler,
+    foto_usd: FOTO_USD,
+    replicate: hesap ? { bagli: true, hesap: hesap.username } : { bagli: false },
+  };
+}
+
+/** Bir zamanın İstanbul'daki günü: "2026-09-26" */
+function istGun(zaman: string | Date) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Istanbul", year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(new Date(zaman));
+}
 
 /** Postgres hata mesajından bizim kodu çıkarır: "BAKIYE_YETERSIZ" gibi. */
 function kodAl(mesaj: string) {
