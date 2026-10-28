@@ -3,7 +3,7 @@
    Beklemede olan randevular sarı durur: müşteri WhatsApp mesajını göndermemiş olabilir,
    berber tek dokunuşla arar veya WhatsApp'tan yazar. */
 
-import { dbAl, AYARLI, HIZMETLER, MARKA_AD, iki, tarihAnahtari, telYaz } from "./db.js?v=4";
+import { dbAl, AYARLI, HIZMETLER, MARKA_AD, iki, tarihAnahtari, telYaz } from "./db.js?v=5";
 
 /* Supabase istemcisi db.js'te tembel yükleniyor (CDN'e erişilemezse tüm modül
    düşmesin diye). Panelin tamamı ona bağlı olduğu için burada bir kez alıp

@@ -6,7 +6,7 @@
  *
  * Sekme yalnızca foto_cuzdan'da satırı olan berbere görünür.
  */
-import { dbAl } from "./db.js?v=4";
+import { dbAl } from "./db.js?v=5";
 
 const KOVA = "foto-studyo";
 const EN_FAZLA = 5;
